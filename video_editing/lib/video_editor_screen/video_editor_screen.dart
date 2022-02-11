@@ -112,7 +112,7 @@ class _VideoEditorState extends State<VideoEditor> with TickerProviderStateMixin
     _isExporting.value = true;
     bool _firstStat = true;
     //NOTE: To use [-crf 17] and [VideoExportPreset] you need ["min-gpl-lts"] package
-    final File? file = await _controller.exportVideo(
+    /*final File? file = */await _controller.exportVideo(
       // preset: VideoExportPreset.medium,
       // customInstruction: "-crf 17",
       onProgress: (statics) {
@@ -120,12 +120,12 @@ class _VideoEditorState extends State<VideoEditor> with TickerProviderStateMixin
         if (_firstStat) {
           _firstStat = false;
         } else {
-          _exportingProgress.value = statics.time /
+          _exportingProgress.value = statics.getTime() /
               _controller.video.value.duration.inMilliseconds;
         }
 
       },
-      /*onCompleted: (file) {
+      onCompleted: (file) {
         _isExporting.value = false;
         if (!mounted) return;
         if (file != null) {
@@ -156,12 +156,12 @@ class _VideoEditorState extends State<VideoEditor> with TickerProviderStateMixin
 
         setState(() => _exported = true);
         Misc.delayed(2000, () => setState(() => _exported = false));
-      },*/
+      },
     );
     _isExporting.value = false;
     if (file != null) {
       final VideoPlayerController _videoController =
-      VideoPlayerController.file(file);
+      VideoPlayerController.file(file!);
       _videoController.initialize().then((value) async {
         setState(() {});
         //_videoController.setVolume(0);
@@ -178,7 +178,7 @@ class _VideoEditorState extends State<VideoEditor> with TickerProviderStateMixin
         await _videoController.pause();
         _videoController.dispose();
       });
-      GallerySaver.saveVideo(file.path,
+      GallerySaver.saveVideo(file!.path,
           albumName: "OTWPhotoEditingDemo");
       _exportText = "Video success export!";
     } else{
@@ -190,29 +190,31 @@ class _VideoEditorState extends State<VideoEditor> with TickerProviderStateMixin
 
   void _exportCover() async {
     setState(() => _exported = false);
-    final File? cover = await _controller.extractCover();
-     // onCompleted: (cover) {
-        //if (!mounted) return;
+    /*final File? cover = */await _controller.extractCover(
+      onCompleted: (cover) {
+      if (!mounted) return;
 
-        if (cover != null) {
-          _exportText = "Cover exported! ${cover.path}";
-          showModalBottomSheet(
-            context: context,
-            backgroundColor: Colors.black54,
-            builder: (BuildContext context) =>
-                Image.memory(cover.readAsBytesSync()),
-          );
-          GallerySaver.saveImage(cover.path,
-              albumName: "OTWPhotoEditingDemo");
-        } else{
-          _exportText = "Error on cover exportation :(";
-        }
+    if (cover != null) {
+      _exportText = "Cover exported! ${cover.path}";
+      showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.black54,
+        builder: (BuildContext context) =>
+            Image.memory(cover.readAsBytesSync()),
+      );
+      GallerySaver.saveImage(cover.path,
+          albumName: "OTWPhotoEditingDemo");
+    } else{
+    _exportText = "Error on cover exportation :(";
+    }
 
 
-        setState(() => _exported = true);
-        Misc.delayed(2000, () => setState(() => _exported = false));
-     // },
-   // );
+    setState(() => _exported = true);
+    Misc.delayed(2000, () => setState(() => _exported = false));
+    },
+    // );
+    );
+
   }
 
   @override

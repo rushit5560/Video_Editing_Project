@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       if (selectedImages!.isEmpty) {} else if (selectedImages.length == 1) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Please Select Minimum 2 images"),
+          content: Text("Please Select 3 images"),
         ));
       } else if (selectedImages.length >= 2) {
         tempList.clear();
@@ -214,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (file != null) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => AddMusic(file: file,)),
+        MaterialPageRoute(builder: (context) => AddMusic(file: file)),
       );
       // context.to(VideoEditor(file: File(file.path)));
     }
