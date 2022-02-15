@@ -64,12 +64,27 @@ class VideoEditModule extends StatelessWidget {
             decoration: containerBackgroundGradient(),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Center(
-                child: Text(
-                  'Video Edit',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 18),
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Image(
+                      image: AssetImage(Images.ic_video_editor),
+                      height: 40,
+                      width: 40,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      'Video Edit',
+                      maxLines: 1,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 17),
+                    ),
+                  )
+                ],
               ),
             ),
           ),
@@ -151,14 +166,28 @@ class CompressVideoModule extends StatelessWidget {
             decoration: containerBackgroundGradient(),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Center(
-                child: Text(
-                  'Compress Video',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 18),
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Image(
+                      image: AssetImage(Images.ic_compress_video),
+                      height: 40,
+                      width: 40,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      'Compress Video',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 17),
+                    ),
+                  )
+                ],
               ),
             ),
           ),
@@ -318,12 +347,26 @@ class AddMusicModule extends StatelessWidget {
             decoration: containerBackgroundGradient(),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Center(
-                child: Text(
-                  'Add Music',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 18),
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Image(
+                      image: AssetImage(Images.ic_add_music),
+                      height: 40,
+                      width: 40,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      'Add Music',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 17),
+                    ),
+                  )
+                ],
               ),
             ),
           ),

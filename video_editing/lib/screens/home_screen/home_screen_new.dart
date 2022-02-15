@@ -37,8 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           VideoEditModule(),
                           const SizedBox(height: 5),
                           CompressVideoModule(),
-                          // const SizedBox(height: 5),
-                          // CompressVideoFromCameraModule(),
                           const SizedBox(height: 5),
                           AddMusicModule(),
                         ],
@@ -46,8 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(height: 10),
                     Container(),
-
-
                   ],
                 ),
               ),

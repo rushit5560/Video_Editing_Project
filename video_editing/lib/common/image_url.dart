@@ -8,4 +8,8 @@ class Images {
   static const ic_launcher = '$root' + 'ic_launcher.png';
   static const ic_google = '$root' + 'google.png';
   static const ic_facebook = '$root' + 'facebook.png';
+
+  static const ic_add_music = '$root' + 'add_music.png';
+  static const ic_compress_video = '$root' + 'compress_video.png';
+  static const ic_video_editor = '$root' + 'video_editor.png';
 }
