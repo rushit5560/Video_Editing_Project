@@ -293,6 +293,7 @@ class CompressVideoModule extends StatelessWidget {
         albumName: "OTWPhotoEditingDemo");
 
   }
+
 }
 
 
