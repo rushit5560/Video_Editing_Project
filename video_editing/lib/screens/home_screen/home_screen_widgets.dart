@@ -7,9 +7,10 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_compress/video_compress.dart';
 import 'package:video_editing/common/common_widgets.dart';
-import 'package:video_editing/crop_video_screen/compress_video.dart';
-import 'package:video_editing/music_add_screen/add_music.dart';
-import 'package:video_editing/video_editor_screen/video_editor_screen.dart';
+import 'package:video_editing/controller/home_screen_controller/home_screen_controller.dart';
+import 'package:video_editing/screens/crop_video_screen/compress_video.dart';
+import 'package:video_editing/screens/music_add_screen/add_music.dart';
+import 'package:video_editing/screens/video_editor_screen/video_editor_screen.dart';
 
 
 
@@ -118,15 +119,12 @@ class VideoEditModule extends StatelessWidget {
 
 }
 
-class CompressVideoFromGalleryModule extends StatefulWidget {
-  CompressVideoFromGalleryModule({Key? key}) : super(key: key);
-  @override
-  State<CompressVideoFromGalleryModule> createState() => _CompressVideoFromGalleryModuleState();
-}
-class _CompressVideoFromGalleryModuleState extends State<CompressVideoFromGalleryModule> {
+class CompressVideoFromGalleryModule extends StatelessWidget {
+
   var file;
-  String _counter = "video";
+
   File? compressFile;
+  final controller = Get.find<HomeScreenController>();
 
   @override
   Widget build(BuildContext context) {
@@ -197,10 +195,10 @@ class _CompressVideoFromGalleryModuleState extends State<CompressVideoFromGaller
     );
     print(info!.path);
     if (info != null) {
-      setState(() {
-        _counter = info.path!;
-        compressFile = File(_counter);
-      });
+      // setState(() {
+      controller.counter.value = info.path!;
+        compressFile = File(controller.counter.value);
+      // });
 
     }
     GallerySaver.saveVideo(compressFile!.path,

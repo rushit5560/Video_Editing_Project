@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:video_editing/screens/home_screen/home_screen_new.dart';
 
-import 'home_screen/home_screen_new.dart';
+
 
 
 void main() {

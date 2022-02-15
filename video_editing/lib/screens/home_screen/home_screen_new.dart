@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:video_editing/common/common_widgets.dart';
+import 'package:video_editing/controller/home_screen_controller/home_screen_controller.dart';
 
 import 'home_screen_widgets.dart';
 
@@ -12,6 +13,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  HomeScreenController controller = Get.put(HomeScreenController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
