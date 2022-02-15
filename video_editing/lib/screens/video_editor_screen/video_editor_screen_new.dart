@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:get/get.dart';
 import 'package:helpers/helpers.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_editing/common/common_widgets.dart';
@@ -116,34 +117,34 @@ class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
         Misc.delayed(2000, () => setState(() => _exported = false));
       },
     );
-    _isExporting.value = false;
-    if (file != null) {
-      final VideoPlayerController _videoController =
-      VideoPlayerController.file(file!);
-      _videoController.initialize().then((value) async {
-        setState(() {});
-        //_videoController.setVolume(0);
-        _videoController.play();
-        _videoController.setLooping(true);
-        await showModalBottomSheet(
-          context: context,
-          backgroundColor: Colors.black54,
-          builder: (_) => AspectRatio(
-            aspectRatio: _videoController.value.aspectRatio,
-            child: VideoPlayer(_videoController),
-          ),
-        );
-        await _videoController.pause();
-        _videoController.dispose();
-      });
-      GallerySaver.saveVideo(file!.path,
-          albumName: "OTWPhotoEditingDemo");
-      _exportText = "Video success export!";
-    } else{
-      _exportText = "Error on export video :(";
-    }
-    setState(() => _exported = true);
-    Misc.delayed(2000, () => setState(() => _exported = false));
+    // _isExporting.value = false;
+    // if (file != null) {
+    //   final VideoPlayerController _videoController =
+    //   VideoPlayerController.file(file!);
+    //   _videoController.initialize().then((value) async {
+    //     setState(() {});
+    //     //_videoController.setVolume(0);
+    //     _videoController.play();
+    //     _videoController.setLooping(true);
+    //     await showModalBottomSheet(
+    //       context: context,
+    //       backgroundColor: Colors.black54,
+    //       builder: (_) => AspectRatio(
+    //         aspectRatio: _videoController.value.aspectRatio,
+    //         child: VideoPlayer(_videoController),
+    //       ),
+    //     );
+    //     await _videoController.pause();
+    //     _videoController.dispose();
+    //   });
+    //   GallerySaver.saveVideo(file!.path,
+    //       albumName: "OTWPhotoEditingDemo");
+    //   _exportText = "Video success export!";
+    // } else{
+    //   _exportText = "Error on export video :(";
+    // }
+    // setState(() => _exported = true);
+    // Misc.delayed(2000, () => setState(() => _exported = false));
   }
 
   void _exportCover() async {
@@ -201,9 +202,12 @@ class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
                                             Stack(
                                               alignment: Alignment.bottomRight,
                                               children: [
-                                                CropGridViewer(
-                                                  controller: _controller,
-                                                  showGrid: false,
+                                                Container(
+                                                  width: Get.width,
+                                                  child: CropGridViewer(
+                                                    controller: _controller,
+                                                    showGrid: false,
+                                                  ),
                                                 ),
 
                                                 Positioned(
@@ -286,39 +290,71 @@ class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
                                   )),
                               Container(
                                   height: 200,
-                                  margin: Margin.top(10),
+                                  //margin: Margin.all(10),
                                   child: Column(children: [
                                     TabBar(
-                                      indicatorColor: Colors.black,
+                                      //isScrollable: true,
+                                      indicatorColor: Colors.transparent,
+                                      //indicatorSize: TabBarIndicatorSize.label,
+                                      labelColor: Colors.black,
+                                      // labelPadding:
+                                      // EdgeInsets.only(top: 10.0, bottom: 5, left: 10, right: 10),
+                                      unselectedLabelColor: Colors.black38,
+                                      //controller: _tabController,
+                                      labelStyle: TextStyle(fontSize: 17, color: Colors.grey),
                                       tabs: [
-                                        Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                            children: [
-                                              Padding(
-                                                  padding: Margin.all(5),
-                                                  child: Icon(Icons.content_cut, color: Colors.black,)),
-                                              Text(
-                                                  'Trim',
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                            ]),
-                                        Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                            children: [
-                                              Padding(
-                                                  padding: Margin.all(5),
-                                                  child: Icon(Icons.video_label, color: Colors.black,)),
-                                              Text(
-                                                  'Cover',
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                ),
-                                              )
-                                            ]),
+                                        Container(
+                                          width: Get.width/2.2,
+                                          height: 50,
+                                          decoration: borderGradientDecoration(),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(3.0),
+                                            child: Container(
+                                              padding: EdgeInsets.only(left: 10, right: 10),
+                                              decoration: containerBackgroundGradient(),
+                                              child: Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                                  children: [
+                                                    Padding(
+                                                        padding: Margin.all(5),
+                                                        child: Icon(Icons.content_cut, color: Colors.black,)),
+                                                    Text(
+                                                        'Trim',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                  ]),
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: Get.width/2.2,
+                                          height: 50,
+                                          decoration: borderGradientDecoration(),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(3.0),
+                                            child: Container(
+                                              padding: EdgeInsets.only(left: 10, right: 10),
+                                              decoration: containerBackgroundGradient(),
+                                              child: Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                                  children: [
+                                                    Padding(
+                                                        padding: Margin.all(5),
+                                                        child: Icon(Icons.video_label, color: Colors.black,)),
+                                                    Text(
+                                                        'Cover',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                      ),
+                                                    )
+                                                  ]),
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                     Expanded(

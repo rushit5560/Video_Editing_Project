@@ -17,41 +17,63 @@ class CropScreenNew extends StatelessWidget {
           MainBackgroundWidget(),
 
           SafeArea(
-            child: Padding(
-              padding: Margin.all(30),
+            child: Container(
+              margin: EdgeInsets.only(left: 15, right: 15),
               child: Column(
                 children: [
-                  cropScreenAppbarModule(context),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () =>
-                              controller.rotate90Degrees(RotateDirection.left),
-                          child: Icon(Icons.rotate_left),
+                  appBar(),
+
+                  SizedBox(height: 15),
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: AnimatedInteractiveViewer(
+                        maxScale: 2.4,
+                        child: CropGridViewer(
+                          controller: controller, /*horizontalMargin: 60*/
                         ),
                       ),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () =>
-                              controller.rotate90Degrees(RotateDirection.right),
-                          child: Icon(Icons.rotate_right),
+                    ),
+                  ),
+                  SizedBox(height: 20,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      GestureDetector(
+                        onTap: () =>
+                            controller.rotate90Degrees(RotateDirection.left),
+                        child: Container(
+                          width: 50,height: 50,
+                          decoration: borderGradientDecoration(),
+                          child: Padding(
+                            padding: const EdgeInsets.all(3.0),
+                            child: Container(
+                                padding: EdgeInsets.only(left: 10, right: 10),
+                                decoration: containerBackgroundGradient(),
+                                child: Icon(Icons.rotate_left)),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () =>
+                            controller.rotate90Degrees(RotateDirection.right),
+                        child: Container(
+                          width: 50,height: 50,
+                          decoration: borderGradientDecoration(),
+                          child: Padding(
+                            padding: const EdgeInsets.all(3.0),
+                            child: Container(
+                                padding: EdgeInsets.only(left: 10, right: 10),
+                                decoration: containerBackgroundGradient(),
+                                child: Icon(Icons.rotate_right)),
+                          ),
                         ),
                       )
                     ],
                   ),
-                  SizedBox(height: 15),
-                  Expanded(
-                    child: AnimatedInteractiveViewer(
-                      maxScale: 2.4,
-                      child: CropGridViewer(
-                        controller: controller, /*horizontalMargin: 60*/
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 15),
+                  SizedBox(height: 30),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       /*Expanded(
                         child: SplashTap(
@@ -65,11 +87,13 @@ class CropScreenNew extends StatelessWidget {
                         ),
                       ),*/
                       buildSplashTap("16:9", 16 / 9,
-                          padding: Margin.horizontal(10)),
+                          padding: Margin.horizontal(15)),
+                      buildSplashTap("3:2", 3 / 2),
                       buildSplashTap("1:1", 1 / 1),
+                      buildSplashTap("2:3", 2 / 3),
                       buildSplashTap("4:5", 4 / 5,
-                          padding: Margin.horizontal(10)),
-                      buildSplashTap("NO", null, padding: Margin.right(10)),
+                          padding: Margin.horizontal(15)),
+                      //buildSplashTap("NO", null, padding: Margin.right(10)),
                       /*Expanded(
                         child: SplashTap(
                           onTap: () {
@@ -89,6 +113,7 @@ class CropScreenNew extends StatelessWidget {
                       ),*/
                     ],
                   ),
+                  SizedBox(height: 10),
                 ],
               ),
             ),
@@ -121,7 +146,7 @@ class CropScreenNew extends StatelessWidget {
 
 
 
-  Widget cropScreenAppbarModule(BuildContext context) {
+ /* Widget cropScreenAppbarModule(BuildContext context) {
     return Container(
       height: 50,
       width: Get.width,
@@ -150,7 +175,11 @@ class CropScreenNew extends StatelessWidget {
               ),
 
               GestureDetector(
-                onTap: () => controller.updateCrop(),
+                onTap: () {
+                  controller.updateCrop();
+                  Get.back();
+                  //context.goBack();
+                },
                 child: Container(
                   child: Icon(Icons.check_rounded),
                 ),
@@ -158,6 +187,55 @@ class CropScreenNew extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }*/
+
+  Widget appBar() {
+    return Container(
+      height: 50,
+      width: Get.width,
+      decoration: borderGradientDecoration(),
+      child: Padding(
+        padding: const EdgeInsets.all(3.0),
+        child: Container(
+            padding: EdgeInsets.only(left: 10, right: 10),
+            decoration: containerBackgroundGradient(),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Get.back();
+                    //showAlertDialog();
+                  },
+                  child: Container(
+                      child: Image.asset(
+                        Images.ic_left_arrow,
+                        scale: 2.5,
+                      )),
+                ),
+                Container(
+                  child: Text(
+                    "Crop Video",
+                    style: TextStyle(
+                        fontFamily: "",
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    controller.updateCrop();
+                    Get.back();
+                    //context.goBack();
+                  },
+                  child: Container(
+                    child: Icon(Icons.check_rounded),
+                  ),
+                ),
+              ],
+            )),
       ),
     );
   }

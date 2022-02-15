@@ -252,70 +252,72 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
         children: [
           MainBackgroundWidget(),
 
-          Container(
-            margin: EdgeInsets.only(left: 15, right: 15, bottom: 15, top: 35),
-            child: Column(
-              children: [
-                appBar(),
-                SizedBox(height: 15,),
+          SafeArea(
+            child: Container(
+              margin: EdgeInsets.only(left: 15, right: 15),
+              child: Column(
+                children: [
+                  appBar(),
+                  SizedBox(height: 15,),
 
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    controller!.value.isInitialized
-                        ? Container(
-                      height: MediaQuery.of(context).size.height/2,
-                      //aspectRatio: _controller!.value.aspectRatio,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                          child: VideoPlayer(controller!)),
-                    )
-                        : Container(),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      controller!.value.isInitialized
+                          ? Container(
+                        height: MediaQuery.of(context).size.height/2,
+                        //aspectRatio: _controller!.value.aspectRatio,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                            child: VideoPlayer(controller!)),
+                      )
+                          : Container(),
 
-                    GestureDetector(
-                      onTap: ()async{
-                        //print('Video Duration: ${_controller!.value.duration.inSeconds}');
-                        print('Duration1: $_duration');
+                      GestureDetector(
+                        onTap: ()async{
+                          //print('Video Duration: ${_controller!.value.duration.inSeconds}');
+                          print('Duration1: $_duration');
 
-                        setState(() {
-                          controller!.value.isPlaying
-                              ? controller!.pause()
-                              : controller!.play();
-                          print('data source : ${controller!.dataSource}');
-                        });
+                          setState(() {
+                            controller!.value.isPlaying
+                                ? controller!.pause()
+                                : controller!.play();
+                            print('data source : ${controller!.dataSource}');
+                          });
 
-                        //to do
-                        setState(() {
-                          isplaying
-                              ? animationIconController1.reverse()
-                              : animationIconController1.forward();
-                          isplaying = !isplaying;
-                        });
-                        if (controller!.value.isPlaying) {
-                          print('isPlaying: ${controller!.value.isPlaying}');
-                          audioCache!.play("Song1.mp3");
+                          //to do
+                          setState(() {
+                            isplaying
+                                ? animationIconController1.reverse()
+                                : animationIconController1.forward();
+                            isplaying = !isplaying;
+                          });
+                          if (controller!.value.isPlaying) {
+                            print('isPlaying: ${controller!.value.isPlaying}');
+                            audioCache!.play("Song1.mp3");
 
-                          // audioPlayer.play('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
-                          //  setState(() {
-                          //    issongplaying = true;
-                          //  });
-                        } else {
-                          print('isPlaying: ${controller!.value.isPlaying}');
-                          audioPlayer.pause();
+                            // audioPlayer.play('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+                            //  setState(() {
+                            //    issongplaying = true;
+                            //  });
+                          } else {
+                            print('isPlaying: ${controller!.value.isPlaying}');
+                            audioPlayer.pause();
 
-                          // setState(() {
-                          //   issongplaying = false;
-                          // });
-                        }
-                      },
-                      child: Icon(
-                        controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                        color: Colors.white,
+                            // setState(() {
+                            //   issongplaying = false;
+                            // });
+                          }
+                        },
+                        child: Icon(
+                          controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           )
         ],
