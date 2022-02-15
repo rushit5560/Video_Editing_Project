@@ -1,10 +1,15 @@
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:video_editing/common/common_widgets.dart';
+import 'package:video_editing/common/image_url.dart';
 import 'package:video_player/video_player.dart';
 
 class AddMusic extends StatefulWidget {
@@ -163,9 +168,10 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
     GallerySaver.saveVideo(widget.file.path, albumName: "Video Maker");
   }
   String ? nowTime;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    /*return Scaffold(
       //backgroundColor: Colors.white,
       appBar: AppBar(
        // actionsIconTheme: IconThemeData(color: Colors.black),
@@ -238,6 +244,127 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
             ),
           ],
         ),
+      ),
+    );*/
+
+    return Scaffold(
+      body: Stack(
+        children: [
+          MainBackgroundWidget(),
+
+          Container(
+            margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
+            child: Column(
+              children: [
+                appBar(),
+
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    controller!.value.isInitialized
+                        ? Container(
+                      height: MediaQuery.of(context).size.height/2,
+                      //aspectRatio: _controller!.value.aspectRatio,
+                      child: VideoPlayer(controller!),
+                    )
+                        : Container(),
+
+                    GestureDetector(
+                      onTap: ()async{
+                        //print('Video Duration: ${_controller!.value.duration.inSeconds}');
+                        print('Duration1: $_duration');
+
+                        setState(() {
+                          controller!.value.isPlaying
+                              ? controller!.pause()
+                              : controller!.play();
+                          print('data source : ${controller!.dataSource}');
+                        });
+
+                        //to do
+                        setState(() {
+                          isplaying
+                              ? animationIconController1.reverse()
+                              : animationIconController1.forward();
+                          isplaying = !isplaying;
+                        });
+                        if (controller!.value.isPlaying) {
+                          print('isPlaying: ${controller!.value.isPlaying}');
+                          audioCache!.play("Song1.mp3");
+
+                          // audioPlayer.play('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+                          //  setState(() {
+                          //    issongplaying = true;
+                          //  });
+                        } else {
+                          print('isPlaying: ${controller!.value.isPlaying}');
+                          audioPlayer.pause();
+
+                          // setState(() {
+                          //   issongplaying = false;
+                          // });
+                        }
+                      },
+                      child: Icon(
+                        controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget appBar() {
+    return Container(
+      height: 50,
+      width: Get.width,
+      decoration: borderGradientDecoration(),
+      child: Padding(
+        padding: const EdgeInsets.all(3.0),
+        child: Container(
+            padding: EdgeInsets.only(left: 10, right: 10),
+            decoration: containerBackgroundGradient(),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Get.back();
+                    //showAlertDialog();
+                  },
+                  child: Container(
+                      child: Image.asset(
+                        Images.ic_left_arrow,
+                        scale: 2.5,
+                      )),
+                ),
+                Container(
+                  child: Text(
+                    "Filter",
+                    style: TextStyle(
+                        fontFamily: "",
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Container()
+                // GestureDetector(
+                //   onTap: () async {
+                //     Fluttertoast.showToast(msg: 'Please Wait...', toastLength: Toast.LENGTH_LONG, timeInSecForIosWeb: 1,);
+                //     await _capturePng().then((value) {
+                //       Get.back();
+                //     });
+                //   },
+                //   child: Container(child: Icon(Icons.check_rounded)),
+                // ),
+              ],
+            )),
       ),
     );
   }

@@ -11,6 +11,7 @@ import 'package:video_editing/controller/home_screen_controller/home_screen_cont
 import 'package:video_editing/screens/crop_video_screen/compress_video.dart';
 import 'package:video_editing/screens/music_add_screen/add_music.dart';
 import 'package:video_editing/screens/video_editor_screen/video_editor_screen.dart';
+import 'package:video_editing/screens/video_editor_screen/video_editor_screen_new.dart';
 
 
 
@@ -58,10 +59,12 @@ class VideoEditModule extends StatelessWidget {
             decoration: containerBackgroundGradient(),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Video Edit',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 18),
+              child: Center(
+                child: Text(
+                  'Video Edit',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
+                ),
               ),
             ),
           ),
@@ -74,7 +77,7 @@ class VideoEditModule extends StatelessWidget {
     final XFile? file = await imagePicker.pickVideo(source: ImageSource.gallery);
     if (file != null) {
       Navigator.push(context, MaterialPageRoute(
-          builder: (context) => VideoEditor(file: File(file.path))
+          builder: (context) => VideoEditorScreenNew(file: File(file.path))
       ));
     }
   }
@@ -83,7 +86,7 @@ class VideoEditModule extends StatelessWidget {
     final XFile? file = await imagePicker.pickVideo(source: ImageSource.camera);
     if (file != null) {
       Navigator.push(context, MaterialPageRoute(
-          builder: (context) => VideoEditor(file: File(file.path))
+          builder: (context) => VideoEditorScreenNew(file: File(file.path))
       ));
     }
   }
@@ -119,7 +122,7 @@ class VideoEditModule extends StatelessWidget {
 
 }
 
-class CompressVideoFromGalleryModule extends StatelessWidget {
+class CompressVideoModule extends StatelessWidget {
 
   var file;
 
@@ -130,14 +133,7 @@ class CompressVideoFromGalleryModule extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        _compressVideo().then((value) {
-
-          //context.to(CompressVideo(compressFile: compressFile!, file: file,));
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) =>  CompressVideo(compressFile: compressFile!, file: file,)),
-          );
-        });
+        modalBottomSheetVideoEdit(context);
       },
       child: Container(
         decoration: borderGradientDecoration(),
@@ -150,12 +146,14 @@ class CompressVideoFromGalleryModule extends StatelessWidget {
             decoration: containerBackgroundGradient(),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Compress Video From Gallery',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 18),
+              child: Center(
+                child: Text(
+                  'Compress Video',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
+                ),
               ),
             ),
           ),
@@ -164,7 +162,48 @@ class CompressVideoFromGalleryModule extends StatelessWidget {
     );
   }
 
-  Future _compressVideo() async {
+  modalBottomSheetVideoEdit(BuildContext context){
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Wrap(
+          children: [
+            ListTile(
+              onTap: (){
+                //pickVideoFromGallery(context);
+              compressVideoFromGallery().then((value) {
+            //context.to(CompressVideo(compressFile: compressFile!, file: file,));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) =>  CompressVideo(compressFile: compressFile!, file: file,)),
+                );
+              });
+                //Get.back();
+              },
+              leading: Icon(Icons.collections),
+              title: Text('Gallery'),
+            ),
+            ListTile(
+              onTap: (){
+                compressVideoFromCamera().then((value) {
+                  //context.to(CompressVideo(compressFile: compressFile!, file: file,));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>  CompressVideo(compressFile: compressFile!, file: file,)),
+                  );
+                });
+                //Get.back();
+              },
+              leading: Icon(Icons.camera),
+              title: Text('Camera'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future compressVideoFromGallery() async {
 
     if (Platform.isMacOS) {
       final typeGroup = XTypeGroup(label: 'videos', extensions: ['mov', 'mp4']);
@@ -205,55 +244,8 @@ class CompressVideoFromGalleryModule extends StatelessWidget {
         albumName: "OTWPhotoEditingDemo");
 
   }
-}
 
-class CompressVideoFromCameraModule extends StatefulWidget {
-  CompressVideoFromCameraModule({Key? key}) : super(key: key);
-  @override
-  State<CompressVideoFromCameraModule> createState() => _CompressVideoFromCameraModuleState();
-}
-class _CompressVideoFromCameraModuleState extends State<CompressVideoFromCameraModule> {
-  var file;
-  String _counter = "video";
-  File? compressFile;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        _compressVideo1().then((value) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) =>  CompressVideo(compressFile: compressFile!, file: file,)),
-          );
-        });
-      },
-      child: Container(
-        decoration: borderGradientDecoration(),
-        child: Padding(
-          padding: const EdgeInsets.all(3),
-          child: Container(
-            width: Get.width,
-            height: 50,
-            alignment: Alignment.centerLeft,
-            decoration: containerBackgroundGradient(),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Compress Video From Camera',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 18),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Future _compressVideo1() async {
+  Future compressVideoFromCamera() async {
 
     if (Platform.isMacOS) {
       final typeGroup = XTypeGroup(label: 'videos', extensions: ['mov', 'mp4']);
@@ -284,16 +276,18 @@ class _CompressVideoFromCameraModuleState extends State<CompressVideoFromCameraM
     );
     print(info!.path);
     if (info != null) {
-      setState(() {
-        _counter = info.path!;
-        compressFile = File(_counter);
-      });
+      // setState(() {
+      controller.counter.value = info.path!;
+      compressFile = File(controller.counter.value);
+      // });
 
     }
     GallerySaver.saveVideo(compressFile!.path,
         albumName: "OTWPhotoEditingDemo");
+
   }
 }
+
 
 class AddMusicModule extends StatelessWidget {
   AddMusicModule({Key? key}) : super(key: key);
@@ -303,18 +297,8 @@ class AddMusicModule extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        videoPick() async {
-          final XFile? file = await imagePicker.pickVideo(source: ImageSource.gallery);
-          //var images = await ExportVideoFrame.exportImage(file!.path, 10, 0);
-          if (file != null) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => AddMusic(file: file)),
-            );
-            // context.to(VideoEditor(file: File(file.path)));
-          }
-        }
-      },
+        modalBottomSheetVideoEdit(context);
+        },
       child: Container(
         decoration: borderGradientDecoration(),
         child: Padding(
@@ -326,16 +310,69 @@ class AddMusicModule extends StatelessWidget {
             decoration: containerBackgroundGradient(),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Add Music',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 18),
+              child: Center(
+                child: Text(
+                  'Add Music',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
+                ),
               ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  modalBottomSheetVideoEdit(BuildContext context){
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Wrap(
+          children: [
+            ListTile(
+              onTap: (){
+                videoPickFromGallery(context);
+              },
+              leading: Icon(Icons.collections),
+              title: Text('Gallery'),
+            ),
+            ListTile(
+              onTap: (){
+                videoPickFromCamera(context);
+                //Get.back();
+              },
+              leading: Icon(Icons.camera),
+              title: Text('Camera'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  videoPickFromGallery(BuildContext context) async {
+      final XFile? file = await imagePicker.pickVideo(source: ImageSource.gallery);
+      //var images = await ExportVideoFrame.exportImage(file!.path, 10, 0);
+      if (file != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AddMusic(file: file)),
+        );
+        // context.to(VideoEditor(file: File(file.path)));
+      }
+    }
+
+  videoPickFromCamera(BuildContext context) async {
+    final XFile? file = await imagePicker.pickVideo(source: ImageSource.camera);
+    //var images = await ExportVideoFrame.exportImage(file!.path, 10, 0);
+    if (file != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => AddMusic(file: file)),
+      );
+      // context.to(VideoEditor(file: File(file.path)));
+    }
   }
 }
 
