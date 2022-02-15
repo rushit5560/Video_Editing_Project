@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:file_selector/file_selector.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
@@ -9,8 +8,6 @@ import 'package:video_compress/video_compress.dart';
 import 'crop_video_screen/compress_video.dart';
 import 'music_add_screen/add_music.dart';
 import 'video_editor_screen/video_editor_screen.dart';
-import 'video_screen/VideoScreen.dart';
-
 
 
 class HomeScreen extends StatefulWidget {
@@ -79,12 +76,12 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Text('Add music'),
             ),
 
-            ElevatedButton(
+            /*ElevatedButton(
               onPressed: () {
                 selectImages(context);
               },
               child: const Text('Create Video Using Multiple Images'),
-            ),
+            ),*/
 
 
           ],
@@ -93,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void selectImages(BuildContext context) async {
+  /*void selectImages(BuildContext context) async {
     final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
     try {
       if (selectedImages!.isEmpty) {} else if (selectedImages.length == 1) {
@@ -114,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
         print('goToImgListScreen : $e');
       }
     }
-  }
+  }*/
 
   void _pickVideo(BuildContext context) async {
     final XFile? file = await imagePicker.pickVideo(source: ImageSource.gallery);
@@ -303,7 +300,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   }*/
 
-
 }
 
 
@@ -369,7 +365,8 @@ class _VideoEditorState extends State<VideoEditor> with TickerProviderStateMixin
     // audioPlayer.positionHandler = (p) => setState(() {
     //       _position = p;
     //     });
-  }*//*
+  }*/
+/*
 
 
   @override
@@ -571,7 +568,8 @@ class _VideoEditorState extends State<VideoEditor> with TickerProviderStateMixin
                                             }
 
 
-                                          });*//*
+                                          });*/
+/*
 
                                             },
                                             child: Container(
