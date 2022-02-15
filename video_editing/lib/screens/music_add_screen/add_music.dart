@@ -253,10 +253,11 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
           MainBackgroundWidget(),
 
           Container(
-            margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
+            margin: EdgeInsets.only(left: 15, right: 15, bottom: 15, top: 35),
             child: Column(
               children: [
                 appBar(),
+                SizedBox(height: 15,),
 
                 Stack(
                   alignment: Alignment.center,
@@ -265,7 +266,9 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
                         ? Container(
                       height: MediaQuery.of(context).size.height/2,
                       //aspectRatio: _controller!.value.aspectRatio,
-                      child: VideoPlayer(controller!),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                          child: VideoPlayer(controller!)),
                     )
                         : Container(),
 
@@ -346,7 +349,7 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
                 ),
                 Container(
                   child: Text(
-                    "Filter",
+                    "Add Music",
                     style: TextStyle(
                         fontFamily: "",
                         fontSize: 18,

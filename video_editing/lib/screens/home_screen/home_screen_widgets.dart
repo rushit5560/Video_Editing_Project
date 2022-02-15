@@ -46,6 +46,7 @@ class VideoEditModule extends StatelessWidget {
      // onTap: () => _pickVideo(context),
       onTap: () {
         modalBottomSheetVideoEdit(context);
+        //Get.back();
       },
       child: Container(
         decoration: borderGradientDecoration(),
