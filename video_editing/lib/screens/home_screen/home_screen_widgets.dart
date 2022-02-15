@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_compress/video_compress.dart';
 import 'package:video_editing/common/common_widgets.dart';
+import 'package:video_editing/common/image_url.dart';
 import 'package:video_editing/controller/home_screen_controller/home_screen_controller.dart';
 import 'package:video_editing/screens/compress_video_screen/compress_video.dart';
 import 'package:video_editing/screens/music_add_screen/add_music.dart';
@@ -22,7 +23,11 @@ class HeaderTextModule extends StatelessWidget {
     return Column(
       children: [
         Container(
-          // child: Image.asset(Images.ic_logo, scale: 5,),
+          child: Image.asset(
+            Images.ic_launcher,
+            height: Get.width * 0.30,
+            width: Get.width * 0.30,
+          ),
         ),
         SizedBox(height: 15),
         Container(
@@ -76,6 +81,7 @@ class VideoEditModule extends StatelessWidget {
   void pickVideoFromGallery(BuildContext context) async {
     final XFile? file = await imagePicker.pickVideo(source: ImageSource.gallery);
     if (file != null) {
+      Get.back();
       Navigator.push(context, MaterialPageRoute(
           builder: (context) => VideoEditorScreenNew(file: File(file.path))
       ));
@@ -85,6 +91,7 @@ class VideoEditModule extends StatelessWidget {
   void pickVideoFromCamera(BuildContext context) async {
     final XFile? file = await imagePicker.pickVideo(source: ImageSource.camera);
     if (file != null) {
+      Get.back();
       Navigator.push(context, MaterialPageRoute(
           builder: (context) => VideoEditorScreenNew(file: File(file.path))
       ));
@@ -100,7 +107,6 @@ class VideoEditModule extends StatelessWidget {
         ListTile(
           onTap: (){
             pickVideoFromGallery(context);
-            //Get.back();
           },
           leading: Icon(Icons.collections),
           title: Text('Gallery'),
@@ -108,7 +114,6 @@ class VideoEditModule extends StatelessWidget {
         ListTile(
           onTap: (){
             pickVideoFromCamera(context);
-            //Get.back();
           },
           leading: Icon(Icons.camera),
           title: Text('Camera'),
@@ -173,6 +178,7 @@ class CompressVideoModule extends StatelessWidget {
                 //pickVideoFromGallery(context);
               compressVideoFromGallery().then((value) {
             //context.to(CompressVideo(compressFile: compressFile!, file: file,));
+                Get.back();
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) =>  CompressVideo(compressFile: compressFile!, file: file,)),
@@ -187,6 +193,7 @@ class CompressVideoModule extends StatelessWidget {
               onTap: (){
                 compressVideoFromCamera().then((value) {
                   //context.to(CompressVideo(compressFile: compressFile!, file: file,));
+                  Get.back();
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) =>  CompressVideo(compressFile: compressFile!, file: file,)),
@@ -355,6 +362,7 @@ class AddMusicModule extends StatelessWidget {
       final XFile? file = await imagePicker.pickVideo(source: ImageSource.gallery);
       //var images = await ExportVideoFrame.exportImage(file!.path, 10, 0);
       if (file != null) {
+        Get.back();
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => AddMusic(file: file)),
@@ -367,6 +375,7 @@ class AddMusicModule extends StatelessWidget {
     final XFile? file = await imagePicker.pickVideo(source: ImageSource.camera);
     //var images = await ExportVideoFrame.exportImage(file!.path, 10, 0);
     if (file != null) {
+      Get.back();
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => AddMusic(file: file)),
