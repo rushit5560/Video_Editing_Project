@@ -67,6 +67,12 @@ flutter:
   assets:
     - assets/
     - assets/images/
+
+  fonts:
+    - family: Lemon Jelly
+      fonts:
+          - asset: assets/font/Lemon Jelly Personal Use.ttf
+            weight: 300
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
