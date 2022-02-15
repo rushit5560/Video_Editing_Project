@@ -27,7 +27,7 @@ class HeaderTextModule extends StatelessWidget {
         SizedBox(height: 15),
         Container(
           child: Text(
-            "Scan4PDF",
+            "Video Editing",
             style: TextStyle(fontSize: 50, fontFamily: "Lemon Jelly"),
           ),
         ),
