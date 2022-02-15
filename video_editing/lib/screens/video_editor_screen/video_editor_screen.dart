@@ -405,25 +405,25 @@ class _VideoEditorState extends State<VideoEditor> with TickerProviderStateMixin
             Expanded(
               child: GestureDetector(
                 onTap: gallery,
-                child: Icon(Icons.collections),
+                child: Icon(Icons.collections, color: Colors.white),
               ),
             ),
             Expanded(
               child: GestureDetector(
                 onTap: () => _controller.rotate90Degrees(RotateDirection.left),
-                child: Icon(Icons.rotate_left),
+                child: Icon(Icons.rotate_left, color: Colors.white),
               ),
             ),
             Expanded(
               child: GestureDetector(
                 onTap: () => _controller.rotate90Degrees(RotateDirection.right),
-                child: Icon(Icons.rotate_right),
+                child: Icon(Icons.rotate_right, color: Colors.white),
               ),
             ),
             Expanded(
               child: GestureDetector(
                 onTap: _openCropScreen,
-                child: Icon(Icons.crop),
+                child: Icon(Icons.crop, color: Colors.white),
               ),
             ),
             Expanded(
@@ -435,7 +435,7 @@ class _VideoEditorState extends State<VideoEditor> with TickerProviderStateMixin
             Expanded(
               child: GestureDetector(
                 onTap: _exportVideo,
-                child: Icon(Icons.save),
+                child: Icon(Icons.save, color: Colors.white),
               ),
             ),
           ],
