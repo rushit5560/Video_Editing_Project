@@ -8,9 +8,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:video_compress/video_compress.dart';
 import 'package:video_editing/common/common_widgets.dart';
 import 'package:video_editing/controller/home_screen_controller/home_screen_controller.dart';
-import 'package:video_editing/screens/crop_video_screen/compress_video.dart';
+import 'package:video_editing/screens/compress_video_screen/compress_video.dart';
 import 'package:video_editing/screens/music_add_screen/add_music.dart';
-import 'package:video_editing/screens/video_editor_screen/video_editor_screen.dart';
 import 'package:video_editing/screens/video_editor_screen/video_editor_screen_new.dart';
 
 

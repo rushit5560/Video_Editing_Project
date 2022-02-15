@@ -5,9 +5,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_compress/video_compress.dart';
-import 'package:video_editing/screens/crop_video_screen/compress_video.dart';
 import 'package:video_editing/screens/music_add_screen/add_music.dart';
 import 'package:video_editing/screens/video_editor_screen/video_editor_screen.dart';
+
+import 'screens/compress_video_screen/compress_video.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -42,7 +43,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ElevatedButton(
               onPressed: () {
                 _compressVideo().then((value) {
-
                   //context.to(CompressVideo(compressFile: compressFile!, file: file,));
                   Navigator.push(
                     context,

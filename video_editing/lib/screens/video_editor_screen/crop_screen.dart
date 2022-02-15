@@ -81,10 +81,10 @@ class CropScreen extends StatelessWidget {
   }
 
   Widget buildSplashTap(
-      String title,
-      double? aspectRatio, {
-        EdgeInsetsGeometry? padding,
-      }) {
+    String title,
+    double? aspectRatio, {
+    EdgeInsetsGeometry? padding,
+  }) {
     return SplashTap(
       onTap: () => controller.preferredCropAspectRatio = aspectRatio,
       child: Padding(
