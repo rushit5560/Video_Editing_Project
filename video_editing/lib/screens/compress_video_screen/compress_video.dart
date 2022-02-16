@@ -18,41 +18,44 @@ class CompressVideo extends StatefulWidget {
 class _CompressVideoState extends State<CompressVideo> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          MainBackgroundWidget(),
+    return WillPopScope(
+      onWillPop: () async => showAlertDialog(),
+      child: Scaffold(
+        body: Stack(
+          children: [
+            MainBackgroundWidget(),
 
-          SafeArea(
-            child: Container(
-              margin: EdgeInsets.only(left: 15, right: 15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+            SafeArea(
+              child: Container(
+                margin: EdgeInsets.only(left: 15, right: 15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
 
-                  appBar(),
+                    appBar(),
 
-                  Column(
-                    //crossAxisAlignment: CrossAxisAlignment.center,
-                    //mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      widget.file.toString().isNotEmpty ? Text('Original video size: ${widget.file.lengthSync()} KB') : const Text('0'),
-                      widget.compressFile.toString().isNotEmpty ? Text('Compress video size: ${widget.compressFile.lengthSync()} KB') : const Text('0'),
-                      SizedBox(height: 10,),
-                      Text('Original path: ${widget.file.path}', textAlign: TextAlign.center,),
-                      SizedBox(height: 10,),
-                      Text('Compress path: ${widget.compressFile.path}', textAlign: TextAlign.center,),
-                    ],
-                  ),
+                    Column(
+                      //crossAxisAlignment: CrossAxisAlignment.center,
+                      //mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        widget.file.toString().isNotEmpty ? Text('Original video size: ${widget.file.lengthSync()} KB') : const Text('0'),
+                        widget.compressFile.toString().isNotEmpty ? Text('Compress video size: ${widget.compressFile.lengthSync()} KB') : const Text('0'),
+                        SizedBox(height: 10,),
+                        Text('Original path: ${widget.file.path}', textAlign: TextAlign.center,),
+                        SizedBox(height: 10,),
+                        Text('Compress path: ${widget.compressFile.path}', textAlign: TextAlign.center,),
+                      ],
+                    ),
 
-                  Container()
+                    Container()
 
 
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -72,8 +75,8 @@ class _CompressVideoState extends State<CompressVideo> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Get.back();
-                    //showAlertDialog();
+                    //Get.back();
+                    showAlertDialog();
                   },
                   child: Container(
                       child: Image.asset(
@@ -104,6 +107,44 @@ class _CompressVideoState extends State<CompressVideo> {
               ],
             )),
       ),
+    );
+  }
+
+  showAlertDialog() {
+
+    Widget cancelButton = TextButton(
+      child: Text("No", style: TextStyle(fontFamily: ""),),
+      onPressed:  () {
+        Get.back();
+        //Get.back();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("Yes", style: TextStyle(fontFamily: ""),),
+      onPressed:  () async{
+        //await _capturePng().then((value) {
+        Get.back();
+        Get.back();
+        //});
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      //title: Text("AlertDialog"),
+      content: Text("Do you want to exit?", style: TextStyle(fontFamily: ""),),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

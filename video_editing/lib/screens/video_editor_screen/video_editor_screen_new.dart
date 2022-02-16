@@ -178,228 +178,238 @@ class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          MainBackgroundWidget(),
+    return WillPopScope(
+      onWillPop: () async => showAlertDialog(),
+      child: Scaffold(
+        body: Stack(
+          children: [
+            MainBackgroundWidget(),
 
-          SafeArea(
-            child: _controller.initialized
-                ? SafeArea(
-                child: Stack(children: [
-                  Column(children: [
-                    _topNavBar(),
-                    Expanded(
-                        child: DefaultTabController(
-                            length: 2,
-                            child: Column(children: [
-                              Expanded(
-                                  child: TabBarView(
-                                    physics: NeverScrollableScrollPhysics(),
-                                    children: [
-                                      Stack(alignment: Alignment.center,
-                                          children: [
-                                            Stack(
-                                              alignment: Alignment.bottomRight,
-                                              children: [
-                                                Container(
-                                                  width: Get.width,
-                                                  child: CropGridViewer(
-                                                    controller: _controller,
-                                                    showGrid: false,
-                                                  ),
-                                                ),
-
-                                                Positioned(
-                                                    bottom: 5,
-                                                    child: file != null ? Image.file(file!,
-                                                      height: 50,
-                                                      width: MediaQuery.of(context).size.width,) : Container())
-                                              ],
-                                            ),
-
-                                            AnimatedBuilder(
-                                              animation: _controller.video,
-                                              builder: (_, __) => OpacityTransition(
-                                                visible: !_controller.isPlaying,
-                                                child: GestureDetector(
-                                                  //onTap: _controller.video.play,
-                                                  //onTap: ()=> _controller.video.play,
-                                                  onTap: () async {
-
-                                                    _controller.video.play();
-
-                                                    // setState(() {
-                                                    //   isplaying ? _animationIconController1!.reverse() : _animationIconController1!.forward();
-                                                    //   isplaying = !isplaying;
-                                                    //   print('isplaying : $isplaying');
-                                                    // });
-                                                    // if (issongplaying == false) {
-                                                    //   // audioCache!.play("Song1.mp3");
-                                                    //   audioPlayer.play('song1.mp3');
-                                                    //   setState(() {
-                                                    //     issongplaying = true;
-                                                    //     print('issongplaying1 : $issongplaying');
-                                                    //   });
-                                                    // } else {
-                                                    //   await Future.delayed(Duration(seconds: 1));
-                                                    //   await audioPlayer.pause();
-                                                    //   setState(() {
-                                                    //     issongplaying = false;
-                                                    //     print('issongplaying2 : $issongplaying');
-                                                    //   });
-                                                    // }
-
-                                                    /*setState(() {
-                                            isAnimated = !isAnimated;
-
-                                            if(isAnimated)
-                                            {
-                                              print('print: $isAnimated');
-                                              _controller.video.play();
-                                              iconController.forward();
-                                              audioPlayer1.play();
-                                            }else{
-                                              print('print1: $isAnimated');
-                                             // _controller.video.pause();
-                                              iconController.reverse();
-                                              audioPlayer1.pause();
-                                            }
-
-
-                                          });*/
-                                                  },
-                                                  child: Container(
-                                                    width: 40,
-                                                    height: 40,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      shape: BoxShape.circle,
+            SafeArea(
+              child: _controller.initialized
+                  ? SafeArea(
+                  child: Stack(children: [
+                    Column(children: [
+                      _topNavBar(),
+                      SizedBox(height: 10,),
+                      Expanded(
+                          child: DefaultTabController(
+                              length: 2,
+                              child: Column(children: [
+                                Expanded(
+                                    child: TabBarView(
+                                      physics: NeverScrollableScrollPhysics(),
+                                      children: [
+                                        Stack(alignment: Alignment.center,
+                                            children: [
+                                              Stack(
+                                                alignment: Alignment.bottomRight,
+                                                children: [
+                                                  Container(
+                                                    //width: Get.width,
+                                                    //color: Colors.transparent,
+                                                    // decoration: BoxDecoration(
+                                                    //   color: Colors.yellow,
+                                                    // ),
+                                                    child: CropGridViewer(
+                                                      controller: _controller,
+                                                      showGrid: false,
+                                                      //horizontalMargin: 10,
                                                     ),
-                                                    child: Icon(Icons.play_arrow,
-                                                        color: Colors.black),
+                                                  ),
+
+                                                  Positioned(
+                                                      bottom: 5,
+                                                      child: file != null ? Image.file(file!,
+                                                        height: 50,
+                                                        width: MediaQuery.of(context).size.width,) : Container())
+                                                ],
+                                              ),
+
+                                              AnimatedBuilder(
+                                                animation: _controller.video,
+                                                builder: (_, __) => OpacityTransition(
+                                                  visible: !_controller.isPlaying,
+                                                  child: GestureDetector(
+                                                    //onTap: _controller.video.play,
+                                                    //onTap: ()=> _controller.video.play,
+                                                    onTap: () async {
+
+                                                      _controller.video.play();
+
+                                                      // setState(() {
+                                                      //   isplaying ? _animationIconController1!.reverse() : _animationIconController1!.forward();
+                                                      //   isplaying = !isplaying;
+                                                      //   print('isplaying : $isplaying');
+                                                      // });
+                                                      // if (issongplaying == false) {
+                                                      //   // audioCache!.play("Song1.mp3");
+                                                      //   audioPlayer.play('song1.mp3');
+                                                      //   setState(() {
+                                                      //     issongplaying = true;
+                                                      //     print('issongplaying1 : $issongplaying');
+                                                      //   });
+                                                      // } else {
+                                                      //   await Future.delayed(Duration(seconds: 1));
+                                                      //   await audioPlayer.pause();
+                                                      //   setState(() {
+                                                      //     issongplaying = false;
+                                                      //     print('issongplaying2 : $issongplaying');
+                                                      //   });
+                                                      // }
+
+                                                      /*setState(() {
+                                              isAnimated = !isAnimated;
+
+                                              if(isAnimated)
+                                              {
+                                                print('print: $isAnimated');
+                                                _controller.video.play();
+                                                iconController.forward();
+                                                audioPlayer1.play();
+                                              }else{
+                                                print('print1: $isAnimated');
+                                               // _controller.video.pause();
+                                                iconController.reverse();
+                                                audioPlayer1.pause();
+                                              }
+
+
+                                            });*/
+                                                    },
+                                                    child: Container(
+                                                      width: 40,
+                                                      height: 40,
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                      child: Icon(Icons.play_arrow,
+                                                          color: Colors.black),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ]
-                                      ),
-                                      //Container()
-                                      CoverViewer(controller: _controller)
-                                    ],
-                                  )),
-                              Container(
-                                  height: 200,
-                                  //margin: Margin.all(10),
-                                  child: Column(children: [
-                                    TabBar(
-                                      //isScrollable: true,
-                                      indicatorColor: Colors.transparent,
-                                      //indicatorSize: TabBarIndicatorSize.label,
-                                      labelColor: Colors.black,
-                                      // labelPadding:
-                                      // EdgeInsets.only(top: 10.0, bottom: 5, left: 10, right: 10),
-                                      unselectedLabelColor: Colors.black38,
-                                      //controller: _tabController,
-                                      labelStyle: TextStyle(fontSize: 17, color: Colors.grey),
-                                      tabs: [
-                                        Container(
-                                          width: Get.width/2.2,
-                                          height: 50,
-                                          decoration: borderGradientDecoration(),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(3.0),
-                                            child: Container(
-                                              padding: EdgeInsets.only(left: 10, right: 10),
-                                              decoration: containerBackgroundGradient(),
-                                              child: Row(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                                  children: [
-                                                    Padding(
-                                                        padding: Margin.all(5),
-                                                        child: Icon(Icons.content_cut, color: Colors.black,)),
-                                                    Text(
-                                                        'Trim',
-                                                      style: TextStyle(
-                                                        color: Colors.black,
-                                                      ),
-                                                    ),
-                                                  ]),
-                                            ),
-                                          ),
+                                            ]
                                         ),
-                                        Container(
-                                          width: Get.width/2.2,
-                                          height: 50,
-                                          decoration: borderGradientDecoration(),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(3.0),
-                                            child: Container(
-                                              padding: EdgeInsets.only(left: 10, right: 10),
-                                              decoration: containerBackgroundGradient(),
-                                              child: Row(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                                  children: [
-                                                    Padding(
-                                                        padding: Margin.all(5),
-                                                        child: Icon(Icons.video_label, color: Colors.black,)),
-                                                    Text(
-                                                        'Cover',
-                                                      style: TextStyle(
-                                                        color: Colors.black,
-                                                      ),
-                                                    )
-                                                  ]),
-                                            ),
-                                          ),
-                                        ),
+                                        //Container()
+                                        CoverViewer(controller: _controller)
                                       ],
-                                    ),
-                                    Expanded(
-                                      child: TabBarView(
-                                        children: [
+                                    )),
+                                SizedBox(height: 10,),
+                                Container(
+                                    height: 200,
+                                    //margin: Margin.all(10),
+                                    child: Column(children: [
+                                      TabBar(
+                                        //isScrollable: true,
+                                        indicatorColor: Colors.transparent,
+                                        //indicatorSize: TabBarIndicatorSize.label,
+                                        labelColor: Colors.black,
+                                        // labelPadding:
+                                        // EdgeInsets.only(top: 10.0, bottom: 5, left: 10, right: 10),
+                                        unselectedLabelColor: Colors.black38,
+                                        //controller: _tabController,
+                                        labelStyle: TextStyle(fontSize: 17, color: Colors.grey),
+                                        tabs: [
                                           Container(
-                                              child: Column(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                                  children: _trimSlider())),
+                                            width: Get.width/2.2,
+                                            height: 50,
+                                            decoration: borderGradientDecoration(),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(3.0),
+                                              child: Container(
+                                                padding: EdgeInsets.only(left: 10, right: 10),
+                                                decoration: containerBackgroundGradient(),
+                                                child: Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                    children: [
+                                                      Padding(
+                                                          padding: Margin.all(5),
+                                                          child: Icon(Icons.content_cut, color: Colors.black,)),
+                                                      Text(
+                                                          'Trim',
+                                                        style: TextStyle(
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                    ]),
+                                              ),
+                                            ),
+                                          ),
                                           Container(
-                                            child: Column(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                                children: [_coverSelection()]),
+                                            width: Get.width/2.2,
+                                            height: 50,
+                                            decoration: borderGradientDecoration(),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(3.0),
+                                              child: Container(
+                                                padding: EdgeInsets.only(left: 10, right: 10),
+                                                decoration: containerBackgroundGradient(),
+                                                child: Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                    children: [
+                                                      Padding(
+                                                          padding: Margin.all(5),
+                                                          child: Icon(Icons.video_label, color: Colors.black,)),
+                                                      Text(
+                                                          'Cover',
+                                                        style: TextStyle(
+                                                          color: Colors.black,
+                                                        ),
+                                                      )
+                                                    ]),
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       ),
-                                    )
-                                  ])),
-                              _customSnackBar(),
-                              ValueListenableBuilder(
-                                valueListenable: _isExporting,
-                                builder: (_, bool export, __) => OpacityTransition(
-                                  visible: export,
-                                  child: AlertDialog(
-                                    backgroundColor: Colors.white,
-                                    title: ValueListenableBuilder(
-                                      valueListenable: _exportingProgress,
-                                      builder: (_, double value, __) =>
-                                          TextDesigned(
-                                            "Downloading video ${(value * 100).ceil()}%",
-                                            color: Colors.black,
-                                            bold: true,
-                                          ),
+                                      Expanded(
+                                        child: TabBarView(
+                                          children: [
+                                            Container(
+                                                child: Column(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                    children: _trimSlider())),
+                                            Container(
+                                              child: Column(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                                  children: [_coverSelection()]),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ])),
+                                _customSnackBar(),
+                                ValueListenableBuilder(
+                                  valueListenable: _isExporting,
+                                  builder: (_, bool export, __) => OpacityTransition(
+                                    visible: export,
+                                    child: AlertDialog(
+                                      backgroundColor: Colors.white,
+                                      title: ValueListenableBuilder(
+                                        valueListenable: _exportingProgress,
+                                        builder: (_, double value, __) =>
+                                            TextDesigned(
+                                              "Downloading video ${(value * 100).ceil()}%",
+                                              color: Colors.black,
+                                              bold: true,
+                                            ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              )
-                            ])))
-                  ])
-                ]))
-                : Center(child: CircularProgressIndicator()),
-          ),
-        ],
+                                )
+                              ])))
+                    ])
+                  ]))
+                  : Center(child: CircularProgressIndicator()),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -558,6 +568,43 @@ class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
     );
   }
 
+  showAlertDialog() {
+
+    Widget cancelButton = TextButton(
+      child: Text("No", style: TextStyle(fontFamily: ""),),
+      onPressed:  () {
+        Get.back();
+        //Get.back();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("Yes", style: TextStyle(fontFamily: ""),),
+      onPressed:  () async{
+        //await _capturePng().then((value) {
+        Get.back();
+        Get.back();
+        //});
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      //title: Text("AlertDialog"),
+      content: Text("Do you want to exit?", style: TextStyle(fontFamily: ""),),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
 
 }

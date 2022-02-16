@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:file_selector/file_selector.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
@@ -11,6 +12,7 @@ import 'package:video_editing/common/image_url.dart';
 import 'package:video_editing/controller/home_screen_controller/home_screen_controller.dart';
 import 'package:video_editing/screens/compress_video_screen/compress_video.dart';
 import 'package:video_editing/screens/music_add_screen/add_music.dart';
+import 'package:video_editing/screens/profile_screen/profile_screen.dart';
 import 'package:video_editing/screens/video_editor_screen/video_editor_screen_new.dart';
 
 
@@ -32,7 +34,7 @@ class HeaderTextModule extends StatelessWidget {
         SizedBox(height: 15),
         Container(
           child: Text(
-            "Video Editing",
+            "Video Editor",
             style: TextStyle(fontSize: 50, fontFamily: "Lemon Jelly"),
           ),
         ),
@@ -426,6 +428,57 @@ class AddMusicModule extends StatelessWidget {
       );
       // context.to(VideoEditor(file: File(file.path)));
     }
+  }
+}
+
+class AddProfile extends StatelessWidget {
+  // const AddProfile({Key? key}) : super(key: key);
+  // UserCredential ? result;
+  // AddProfile({this.result});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+        Get.to(() => ProfileScreen());
+      },
+      child: Container(
+        decoration: borderGradientDecoration(),
+        child: Padding(
+          padding: const EdgeInsets.all(3),
+          child: Container(
+            width: Get.width,
+            height: 50,
+            alignment: Alignment.centerLeft,
+            decoration: containerBackgroundGradient(),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Image(
+                      image: AssetImage(Images.ic_profile),
+                      height: 40,
+                      width: 40,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      'Profile',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 17),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 

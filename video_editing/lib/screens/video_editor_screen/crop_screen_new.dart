@@ -25,12 +25,13 @@ class CropScreenNew extends StatelessWidget {
 
                   SizedBox(height: 15),
                   Expanded(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: AnimatedInteractiveViewer(
-                        maxScale: 2.4,
+                    child: AnimatedInteractiveViewer(
+                      maxScale: 2.4,
+                      child: Container(
+                       // color: Colors.yellow,
                         child: CropGridViewer(
                           controller: controller, /*horizontalMargin: 60*/
+
                         ),
                       ),
                     ),
@@ -86,13 +87,11 @@ class CropScreenNew extends StatelessWidget {
                           ),
                         ),
                       ),*/
-                      buildSplashTap("16:9", 16 / 9,
-                          padding: Margin.horizontal(15)),
-                      buildSplashTap("3:2", 3 / 2),
+                      buildSplashTap("3:4", 3 / 4,),
+                      buildSplashTap("16:9", 16 / 9),
                       buildSplashTap("1:1", 1 / 1),
                       buildSplashTap("2:3", 2 / 3),
-                      buildSplashTap("4:5", 4 / 5,
-                          padding: Margin.horizontal(15)),
+                      buildSplashTap("4:5", 4 / 5),
                       //buildSplashTap("NO", null, padding: Margin.right(10)),
                       /*Expanded(
                         child: SplashTap(

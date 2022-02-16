@@ -11,20 +11,61 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          MainBackgroundWidget(),
-
-          SafeArea(
-            child: Center(
-              child: Image.asset(
-                Images.ic_launcher,
-                height: Get.width * 0.55,
-                width: Get.width * 0.55,
-              ),
-            ),
+      // body: Stack(
+      //   children: [
+      //     Image.asset(
+      //       Images.ic_background1,
+      //       fit: BoxFit.cover,
+      //     ),
+      //
+      //     SafeArea(
+      //       child: Column(
+      //         mainAxisAlignment: MainAxisAlignment.center,
+      //         children: [
+      //           Image.asset(
+      //             Images.ic_launcher,
+      //             height: Get.width * 0.55,
+      //             width: Get.width * 0.55,
+      //           ),
+      //
+      //           SizedBox(height: 20,),
+      //
+      //           Container(
+      //             child: Text("Pixy Trim", style: TextStyle(fontSize: 50, fontFamily: "Lemon Jelly"),),
+      //           )
+      //         ],
+      //       ),
+      //     ),
+      //   ],
+      // ),
+      body: Container(
+        height: Get.height,
+        width: Get.width,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('${Images.ic_background2}'),
+            fit: BoxFit.cover,
           ),
-        ],
+        ),
+        child: Container(
+          // height: Get.height * 0.45,
+          child: Column(
+            //crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            //mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                child: Image.asset(Images.ic_launcher, scale: 3,),
+
+              ),
+              SizedBox(height: 20,),
+
+              Container(
+                child: Text("Video Editor", style: TextStyle(fontSize: 50, fontFamily: "Lemon Jelly"),),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
