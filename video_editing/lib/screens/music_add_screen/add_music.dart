@@ -1,13 +1,17 @@
 import 'dart:io';
-
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'package:audioplayers/audioplayers.dart';
+//import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:share/share.dart';
 import 'package:video_editing/common/common_widgets.dart';
 import 'package:video_editing/common/image_url.dart';
 import 'package:video_player/video_player.dart';
@@ -36,6 +40,8 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
   bool isplaying = false;
   int ? time;
   Duration ? dur;
+  final GlobalKey key = GlobalKey();
+  File ? video;
 
   void seekToSeconds(int second) {
     Duration newDuration = Duration(seconds: second);
@@ -147,6 +153,38 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
   String ? dirPath;
   bool loading = false;
 
+
+
+  Future _capturePng() async {
+    try {
+      DateTime time = DateTime.now();
+      String imgName = "${time.hour}-${time.minute}-${time.second}";
+      print('inside');
+      RenderRepaintBoundary boundary =
+      key.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      print(boundary);
+      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+      print("image:===$image");
+      final directory = (await getApplicationDocumentsDirectory()).path;
+      print("Directory: $directory");
+      ByteData? byteData =
+      await image.toByteData(format: ui.ImageByteFormat.png);
+      print("byte data:===$byteData");
+      Uint8List pngBytes = byteData!.buffer.asUint8List();
+      File imgFile = new File('$directory/$imgName.mp4');
+      print("Image path: $imgFile");
+      await imgFile.writeAsBytes(pngBytes);
+      setState(() {
+        video = imgFile;
+      });
+      print("File path====:${video!.path}");
+      load_path_video();
+      // await saveImage();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future load_path_video() async {
 
     // loading = true;
@@ -160,13 +198,18 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
     //   // if I print ($dirPath) I have /data/user/0/com.XXXXX.flutter_video_test/app_flutter/Movies/2019-11-08.mp4
     // });
     // return "";
-    DateTime time= DateTime.now();
-    final String video = "video_maker_${time.hour}_${time.minute}_${time.second}." + "mp4";
-    Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    print('Document directory: ${documentsDirectory.path}');
-    File videoFile = File("${documentsDirectory.path}/$video");
-    GallerySaver.saveVideo(widget.file.path, albumName: "Video Maker");
+
+
+    // DateTime time= DateTime.now();
+    // final String video = "video_maker_${time.hour}_${time.minute}_${time.second}." + "mp4";
+    // Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    // print('Document directory: ${documentsDirectory.path}');
+    // File videoFile = File("${documentsDirectory.path}/$video");
+    //final video = controller!.value.duration;
+    GallerySaver.saveVideo('${controller!.value.aspectRatio}', albumName: "Video Maker");
+
   }
+
   String ? nowTime;
 
   @override
@@ -265,18 +308,19 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
                     Stack(
                       alignment: Alignment.center,
                       children: [
-                        controller!.value.isInitialized
-                            ? Container(
-                          //height: MediaQuery.of(context).size.height/2,
-                          //aspectRatio: _controller!.value.aspectRatio,
-                          child: AspectRatio(
-                            aspectRatio: controller!.value.aspectRatio,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                                child: VideoPlayer(controller!)),
-                          ),
-                        )
-                            : Container(),
+                        RepaintBoundary(
+                          key: key,
+                          child: controller!.value.isInitialized
+                              ? Container(
+                            child: AspectRatio(
+                                aspectRatio: controller!.value.aspectRatio,
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(15),
+                                    child:  VideoPlayer(controller!))),
+                          )
+                              :   Container(),
+                        ),
+
 
                         GestureDetector(
                           onTap: ()async{
@@ -364,16 +408,18 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
                         fontWeight: FontWeight.bold),
                   ),
                 ),
-                Container()
-                // GestureDetector(
-                //   onTap: () async {
-                //     Fluttertoast.showToast(msg: 'Please Wait...', toastLength: Toast.LENGTH_LONG, timeInSecForIosWeb: 1,);
-                //     await _capturePng().then((value) {
-                //       Get.back();
-                //     });
-                //   },
-                //   child: Container(child: Icon(Icons.check_rounded)),
-                // ),
+                GestureDetector(
+                  onTap: () async {
+                    //Fluttertoast.showToast(msg: 'Please Wait...', toastLength: Toast.LENGTH_LONG, timeInSecForIosWeb: 1,);
+                    // await _capturePng().then((value) {
+                    //   Get.back();
+                    // });
+                    //load_path_video();
+                    //_capturePng();
+                    load_path_video();
+                  },
+                  child: Container(child: Icon(Icons.check_rounded)),
+                ),
               ],
             )),
       ),

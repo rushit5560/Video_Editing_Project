@@ -278,8 +278,7 @@ class CompressVideoModule extends StatelessWidget {
       // });
 
     }
-    GallerySaver.saveVideo(compressFile!.path,
-        albumName: "OTWPhotoEditingDemo");
+
 
   }
 

@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
 import 'package:video_editing/common/common_widgets.dart';
 import 'package:video_editing/common/image_url.dart';
@@ -93,17 +95,17 @@ class _CompressVideoState extends State<CompressVideo> {
                         fontWeight: FontWeight.bold),
                   ),
                 ),
-                Container()
-                /*GestureDetector(
+                GestureDetector(
                   onTap: () {
-                    controller.updateCrop();
+                    Fluttertoast.showToast(msg: "Save in to gallery");
                     Get.back();
-                    //context.goBack();
+                    GallerySaver.saveVideo(widget.compressFile.path,
+                        albumName: "Video Maker");
                   },
                   child: Container(
-                    child: Icon(Icons.check_rounded),
+                    child: Icon(Icons.download),
                   ),
-                ),*/
+                ),
               ],
             )),
       ),

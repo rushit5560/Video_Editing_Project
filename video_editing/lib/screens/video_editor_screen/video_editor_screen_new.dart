@@ -95,19 +95,19 @@ class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
             //_videoController.setVolume(0);
             _videoController.play();
             _videoController.setLooping(true);
-            await showModalBottomSheet(
-              context: context,
-              backgroundColor: Colors.black54,
-              builder: (_) => AspectRatio(
-                aspectRatio: _videoController.value.aspectRatio,
-                child: VideoPlayer(_videoController),
-              ),
-            );
+            // await showModalBottomSheet(
+            //   context: context,
+            //   backgroundColor: Colors.black54,
+            //   builder: (_) => AspectRatio(
+            //     aspectRatio: _videoController.value.aspectRatio,
+            //     child: VideoPlayer(_videoController),
+            //   ),
+            // );
             await _videoController.pause();
             _videoController.dispose();
           });
           GallerySaver.saveVideo(file.path,
-              albumName: "OTWPhotoEditingDemo");
+              albumName: "Video Maker");
           _exportText = "Video success export!";
         } else {
           _exportText = "Error on export video :(";
@@ -159,10 +159,10 @@ class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
             context: context,
             backgroundColor: Colors.black54,
             builder: (BuildContext context) =>
-                Image.memory(cover.readAsBytesSync()),
+                Image.memory(cover.readAsBytesSync(),fit: BoxFit.cover,),
           );
           GallerySaver.saveImage(cover.path,
-              albumName: "OTWPhotoEditingDemo");
+              albumName: "Video Maker");
         } else{
           _exportText = "Error on cover exportation :(";
         }

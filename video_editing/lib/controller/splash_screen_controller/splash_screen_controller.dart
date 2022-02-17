@@ -34,7 +34,7 @@ class SplashScreenController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    Timer(const Duration(seconds: 2), () => getOnBoardingValue());
+    Timer(const Duration(seconds: 3), () => getOnBoardingValue());
   }
 
 }
