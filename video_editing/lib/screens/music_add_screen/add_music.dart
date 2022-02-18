@@ -375,6 +375,14 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
                               color: Colors.white,
                             ),
                           ),
+
+                          Positioned(
+                            bottom: 0,left: 0,right: 0,
+                            child: VideoProgressIndicator(
+                              controller!,
+                              allowScrubbing: true,
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -388,6 +396,7 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
       ),
     );
   }
+
 
   Widget appBar() {
     return Container(
@@ -476,6 +485,23 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
       builder: (BuildContext context) {
         return alert;
       },
+    );
+  }
+}
+
+class BasicOverlayWidget extends StatelessWidget {
+  //const BasicOverlayWidget({Key? key}) : super(key: key);
+  VideoPlayerController controller;
+  BasicOverlayWidget({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      bottom: 0,left: 0,right: 0,
+      child: VideoProgressIndicator(
+          controller,
+          allowScrubbing: true,
+      ),
     );
   }
 }
