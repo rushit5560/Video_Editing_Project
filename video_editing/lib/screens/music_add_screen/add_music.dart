@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:audioplayers/audioplayers.dart';
+import 'package:dio/dio.dart';
 //import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +10,9 @@ import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:share/share.dart';
 import 'package:video_editing/common/common_widgets.dart';
 import 'package:video_editing/common/image_url.dart';
 import 'package:video_player/video_player.dart';
@@ -206,7 +207,19 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
     // print('Document directory: ${documentsDirectory.path}');
     // File videoFile = File("${documentsDirectory.path}/$video");
     //final video = controller!.value.duration;
-    GallerySaver.saveVideo('${controller!.value.aspectRatio}', albumName: "Video Maker");
+    await GallerySaver.saveVideo('${video!.path}', albumName: "Video Maker");
+
+  }
+
+  _saveVideo() async {
+    var appDocDir = await getTemporaryDirectory();
+    String savePath = appDocDir.path + "/temp.mp4";
+    print('savePath: $savePath');
+    if(File(savePath).existsSync()){
+      final result = await ImageGallerySaver.saveFile(savePath);
+      print('result: $result');
+    }
+    //await Dio().download('${widget.file.path}', savePath);
 
   }
 
@@ -305,12 +318,12 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
                     appBar(),
                     SizedBox(height: 15,),
 
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        RepaintBoundary(
-                          key: key,
-                          child: controller!.value.isInitialized
+                    RepaintBoundary(
+                      key: key,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          controller!.value.isInitialized
                               ? Container(
                             child: AspectRatio(
                                 aspectRatio: controller!.value.aspectRatio,
@@ -319,52 +332,53 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
                                     child:  VideoPlayer(controller!))),
                           )
                               :   Container(),
-                        ),
 
 
-                        GestureDetector(
-                          onTap: ()async{
-                            //print('Video Duration: ${_controller!.value.duration.inSeconds}');
-                            print('Duration1: $_duration');
+                          GestureDetector(
+                            onTap: ()async{
+                              //print('Video Duration: ${_controller!.value.duration.inSeconds}');
+                              print('Duration1: $_duration');
 
-                            setState(() {
-                              controller!.value.isPlaying
-                                  ? controller!.pause()
-                                  : controller!.play();
-                              print('data source : ${controller!.dataSource}');
-                            });
-
-                            //to do
-                            setState(() {
-                              isplaying
-                                  ? animationIconController1.reverse()
-                                  : animationIconController1.forward();
-                              isplaying = !isplaying;
-                            });
-                            if (controller!.value.isPlaying) {
-                              print('isPlaying: ${controller!.value.isPlaying}');
-                              audioCache!.play("Song1.mp3");
-
-                              // audioPlayer.play('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
-                              //  setState(() {
-                              //    issongplaying = true;
-                              //  });
-                            } else {
-                              print('isPlaying: ${controller!.value.isPlaying}');
-                              audioPlayer.pause();
-
+                              setState(() {
+                                controller!.value.isPlaying
+                                    ? controller!.pause()
+                                    : controller!.play();
+                                print('data source : ${controller!.dataSource}');
+                              });
+                              //
+                              // //to do
                               // setState(() {
-                              //   issongplaying = false;
+                              //   isplaying
+                              //       ? animationIconController1.reverse()
+                              //       : animationIconController1.forward();
+                              //   isplaying = !isplaying;
                               // });
-                            }
-                          },
-                          child: Icon(
-                            controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                            color: Colors.white,
+                              if (controller!.value.isPlaying) {
+                                print('isPlaying: ${controller!.value.isPlaying}');
+                                audioCache!.play("Song1.mp3");
+
+                                // audioPlayer.play('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+                                //  setState(() {
+                                //    issongplaying = true;
+                                //  });
+                              } else {
+                                print('isPlaying: ${controller!.value.isPlaying}');
+                                audioPlayer.pause();
+
+                                // setState(() {
+                                //   issongplaying = false;
+                                // });
+                              }
+                            },
+                            child: Icon(
+                              controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
+
                   ],
                 ),
               ),
@@ -415,8 +429,9 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
                     //   Get.back();
                     // });
                     //load_path_video();
-                    //_capturePng();
-                    load_path_video();
+                    _capturePng();
+                    //load_path_video();
+                    //_saveVideo();
                   },
                   child: Container(child: Icon(Icons.check_rounded)),
                 ),

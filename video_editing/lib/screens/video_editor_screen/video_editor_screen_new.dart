@@ -108,9 +108,9 @@ class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
           });
           GallerySaver.saveVideo(file.path,
               albumName: "Video Maker");
-          _exportText = "Video success export!";
+          _exportText = "Video successfully Downloaded!";
         } else {
-          _exportText = "Error on export video :(";
+          _exportText = "Error on Download video :(";
         }
 
         setState(() => _exported = true);
@@ -154,7 +154,7 @@ class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
         if (!mounted) return;
 
         if (cover != null) {
-          _exportText = "Cover exported! ${cover.path}";
+          _exportText = "Video Cover Downloaded! ${cover.path}";
           showModalBottomSheet(
             context: context,
             backgroundColor: Colors.black54,
@@ -164,7 +164,7 @@ class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
           GallerySaver.saveImage(cover.path,
               albumName: "Video Maker");
         } else{
-          _exportText = "Error on cover exportation :(";
+          _exportText = "Error on cover Downloaded :(";
         }
 
 
@@ -188,7 +188,9 @@ class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
             SafeArea(
               child: _controller.initialized
                   ? SafeArea(
-                  child: Stack(children: [
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                      children: [
                     Column(children: [
                       _topNavBar(),
                       SizedBox(height: 10,),
@@ -384,27 +386,35 @@ class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
                                         ),
                                       )
                                     ])),
-                                _customSnackBar(),
-                                ValueListenableBuilder(
-                                  valueListenable: _isExporting,
-                                  builder: (_, bool export, __) => OpacityTransition(
-                                    visible: export,
-                                    child: AlertDialog(
-                                      backgroundColor: Colors.white,
-                                      title: ValueListenableBuilder(
-                                        valueListenable: _exportingProgress,
-                                        builder: (_, double value, __) =>
-                                            TextDesigned(
-                                              "Downloading video ${(value * 100).ceil()}%",
-                                              color: Colors.black,
-                                              bold: true,
-                                            ),
-                                      ),
+
+                              ])))
+                    ]),
+
+
+                    ValueListenableBuilder(
+                      valueListenable: _isExporting,
+                      builder: (_, bool export, __) => OpacityTransition(
+                        visible: export,
+                        child:  ValueListenableBuilder(
+                            valueListenable: _exportingProgress,
+                            builder: (_, double value, __) =>
+                                Container(
+                                  height: 55,
+                                  width: Get.width/2,
+                                  color: Colors.black,
+                                  child: Center(
+                                    child: Text(
+                                      "Downloading video ${(value * 100).ceil()}%",
+                                      style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)
+
                                     ),
                                   ),
-                                )
-                              ])))
-                    ])
+                                ),
+                          ),
+                      ),
+                    ),
+                        _customSnackBar(),
+
                   ]))
                   : Center(child: CircularProgressIndicator()),
             ),
@@ -556,11 +566,10 @@ class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
         child: Container(
           height: height,
           width: double.infinity,
-          color: Colors.black.withOpacity(0.8),
+          color: Colors.black,
           child: Center(
-            child: TextDesigned(
-              _exportText,
-              bold: true,
+            child: Text(
+              _exportText,style: TextStyle(color: Colors.white),
             ),
           ),
         ),
