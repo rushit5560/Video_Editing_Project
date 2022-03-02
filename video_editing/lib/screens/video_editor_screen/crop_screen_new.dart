@@ -87,10 +87,10 @@ class CropScreenNew extends StatelessWidget {
                           ),
                         ),
                       ),*/
-                      buildSplashTap("3:4", 3 / 4,),
-                      buildSplashTap("16:9", 16 / 9),
-                      buildSplashTap("1:1", 1 / 1),
+                      buildSplashTap("1:1", 1 / 1,),
+                     // buildSplashTap("3:2", 3 / 2),
                       buildSplashTap("2:3", 2 / 3),
+                      buildSplashTap("3:4", 3 / 4),
                       buildSplashTap("4:5", 4 / 5),
                       //buildSplashTap("NO", null, padding: Margin.right(10)),
                       /*Expanded(

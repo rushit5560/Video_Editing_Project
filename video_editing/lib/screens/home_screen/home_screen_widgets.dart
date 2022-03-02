@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:file_selector/file_selector.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
@@ -144,18 +145,45 @@ class VideoEditModule extends StatelessWidget {
 
 }
 
-class CompressVideoModule extends StatelessWidget {
+class CompressVideoModule extends StatefulWidget {
 
+  @override
+  State<CompressVideoModule> createState() => _CompressVideoModuleState();
+}
+
+class _CompressVideoModuleState extends State<CompressVideoModule> {
   var file;
 
   File? compressFile;
+
   final controller = Get.find<HomeScreenController>();
+  Subscription ? subscription;
+  double ? progress;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    subscription = VideoCompress.compressProgress$.subscribe((progress) {
+      setState(() {
+        this.progress = progress;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    VideoCompress.cancelCompression();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final value = progress == null ? progress : progress! / 100;
     return GestureDetector(
       onTap: () {
-        modalBottomSheetVideoEdit(context);
+        modalBottomSheetVideoEdit(context, value);
       },
       child: Container(
         decoration: borderGradientDecoration(),
@@ -198,17 +226,17 @@ class CompressVideoModule extends StatelessWidget {
     );
   }
 
-  modalBottomSheetVideoEdit(BuildContext context){
+  modalBottomSheetVideoEdit(BuildContext context, value){
     return showModalBottomSheet(
       context: context,
       builder: (context) {
         return Wrap(
           children: [
             ListTile(
-              onTap: (){
+              onTap: () {
                 //pickVideoFromGallery(context);
-              compressVideoFromGallery().then((value) {
-            //context.to(CompressVideo(compressFile: compressFile!, file: file,));
+
+              compressVideoFromGallery(value).then((value) {
                 Get.back();
                 Navigator.push(
                   context,
@@ -241,7 +269,7 @@ class CompressVideoModule extends StatelessWidget {
     );
   }
 
-  Future compressVideoFromGallery() async {
+  Future compressVideoFromGallery(value) async {
 
     if (Platform.isMacOS) {
       final typeGroup = XTypeGroup(label: 'videos', extensions: ['mov', 'mp4']);
@@ -254,6 +282,33 @@ class CompressVideoModule extends StatelessWidget {
     if (file == null) {
       return;
     }
+    showDialog(
+        context: context,
+        //barrierDismissiible: false,
+        builder: (context) {
+          return Dialog(
+              child: Padding(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('Compressing Video ...', style: TextStyle(fontSize: 20),),
+                    SizedBox(height: 20,),
+                    LinearProgressIndicator(value: value, minHeight: 12,),
+                    SizedBox(height: 15,),
+                    ElevatedButton(
+                      onPressed: (){
+                        VideoCompress.cancelCompression();
+                        Get.back();
+                      },
+                      child: Text("Cancel"),
+                    )
+                  ],
+                ),
+              )
+          );
+        }
+    );
     await VideoCompress.setLogLevel(0);
     Fluttertoast.showToast(
         msg: "Compressing Video Please wait",
@@ -264,6 +319,7 @@ class CompressVideoModule extends StatelessWidget {
         textColor: Colors.white,
         fontSize: 16.0
     );
+    //CircularProgressIndicator();
     final MediaInfo? info = await VideoCompress.compressVideo(
       file.path,
       quality: VideoQuality.MediumQuality,
@@ -277,7 +333,9 @@ class CompressVideoModule extends StatelessWidget {
         compressFile = File(controller.counter.value);
       // });
 
-    }
+    } /*else{
+      CircularProgressIndicator();
+    }*/
 
 
   }
@@ -319,11 +377,10 @@ class CompressVideoModule extends StatelessWidget {
       // });
 
     }
-    GallerySaver.saveVideo(compressFile!.path,
-        albumName: "OTWPhotoEditingDemo");
+    // GallerySaver.saveVideo(compressFile!.path,
+    //     albumName: "OTWPhotoEditingDemo");
 
   }
-
 }
 
 

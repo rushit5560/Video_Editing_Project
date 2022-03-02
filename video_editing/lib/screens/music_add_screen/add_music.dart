@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_media_gallery_saver/flutter_media_gallery_saver.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
@@ -49,6 +50,13 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
     audioPlayer.seek(newDuration);
   }
 
+  // List<String> musicList = [
+  //   'assets/Song1.mp3',
+  //   'assets/Song2.mp3'
+  // ];
+  List<Music> musicList = [];
+  String ? selectedMusic;
+
   @override
   void initState() {
     super.initState();
@@ -90,6 +98,16 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
 
     initPlayer();
     //load_path_video();
+    musicData();
+  }
+
+  musicData(){
+    musicList.add(
+        Music(name: 'Song1.Mp3', musicUrl: 'Song1.mp3'),
+    );
+    musicList.add(
+      Music(name: 'Song2.Mp3', musicUrl: 'Song2.mp3'),
+    );
   }
 
   void checkVideo(){
@@ -173,20 +191,21 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
       print("byte data:===$byteData");
       Uint8List pngBytes = byteData!.buffer.asUint8List();
       File imgFile = new File('$directory/$imgName.mp4');
-      print("Image path: $imgFile");
+      print("Image path: ${imgFile.writeAsBytes(pngBytes)}");
       await imgFile.writeAsBytes(pngBytes);
       setState(() {
         video = imgFile;
       });
+      print("File====:${video!}");
       print("File path====:${video!.path}");
-      load_path_video();
+      loadPathVideo();
       // await saveImage();
     } catch (e) {
       print(e);
     }
   }
 
-  Future load_path_video() async {
+  Future loadPathVideo() async {
 
     // loading = true;
     //
@@ -207,8 +226,28 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
     // print('Document directory: ${documentsDirectory.path}');
     // File videoFile = File("${documentsDirectory.path}/$video");
     //final video = controller!.value.duration;
-    await GallerySaver.saveVideo('${video!.path}', albumName: "Video Maker");
 
+    // var appDocDir = await getTemporaryDirectory();
+    // String savePath = appDocDir.path + "/temp.mp4";
+    // if(File(savePath).existsSync()){
+    //   final result = await FlutterGallerySaver.saveVideo(savePath);
+    //   print(result);
+    //   _toastInfo("$result");
+    // }else{
+    //   String fileUrl = widget.file.path;
+    //   await Dio().download(fileUrl, savePath, onReceiveProgress: (count, total) {
+    //     print((count / total * 100).toStringAsFixed(0) + "%");
+    //   });
+    //   final result = await FlutterGallerySaver.saveVideo(savePath);
+    //   print(result);
+    //   _toastInfo("$result");
+    // }
+    await GallerySaver.saveVideo('${video!.path}', albumName: "Video Maker");
+    Fluttertoast.showToast(msg: "Save in to gallery");
+
+  }
+  _toastInfo(String info) {
+    Fluttertoast.showToast(msg: info, toastLength: Toast.LENGTH_LONG);
   }
 
   _saveVideo() async {
@@ -219,89 +258,16 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
       final result = await ImageGallerySaver.saveFile(savePath);
       print('result: $result');
     }
-    //await Dio().download('${widget.file.path}', savePath);
+    await Dio().download('${widget.file.path}', savePath);
 
   }
 
   String ? nowTime;
+  bool mute = false;
+  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    /*return Scaffold(
-      //backgroundColor: Colors.white,
-      appBar: AppBar(
-       // actionsIconTheme: IconThemeData(color: Colors.black),
-        //backgroundColor: Colors.white,
-        title: Text("Add Music"),
-        centerTitle: true,
-        actions: [
-          // GestureDetector(
-          //   onTap: () async {
-          //     // final video = File(_controller!.value.toString());
-          //     // await GallerySaver.saveVideo('${video.path}');
-          //     // print('path: ${video.path}');
-          //     load_path_video();
-          //   },
-          //     child: Icon(Icons.save_alt))
-        ],
-      ),
-      body: Center(
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            controller!.value.isInitialized
-                ? Container(
-              height: MediaQuery.of(context).size.height,
-              //aspectRatio: _controller!.value.aspectRatio,
-              child: VideoPlayer(controller!),
-            )
-                : Container(),
-
-            GestureDetector(
-              onTap: ()async{
-                //print('Video Duration: ${_controller!.value.duration.inSeconds}');
-                print('Duration1: $_duration');
-
-                setState(() {
-                  controller!.value.isPlaying
-                      ? controller!.pause()
-                      : controller!.play();
-                  print('data source : ${controller!.dataSource}');
-                });
-
-                //to do
-                setState(() {
-                  isplaying
-                      ? animationIconController1.reverse()
-                      : animationIconController1.forward();
-                  isplaying = !isplaying;
-                });
-                if (controller!.value.isPlaying) {
-                  print('isPlaying: ${controller!.value.isPlaying}');
-                   audioCache!.play("Song1.mp3");
-
-                   // audioPlayer.play('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
-                 //  setState(() {
-                 //    issongplaying = true;
-                 //  });
-                } else {
-                  print('isPlaying: ${controller!.value.isPlaying}');
-                  audioPlayer.pause();
-
-                  // setState(() {
-                  //   issongplaying = false;
-                  // });
-                }
-              },
-              child: Icon(
-                controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );*/
 
     return WillPopScope(
       onWillPop: () async => showAlertDialog(),
@@ -317,75 +283,112 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
                   children: [
                     appBar(),
                     SizedBox(height: 15,),
-
-                    RepaintBoundary(
-                      key: key,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          controller!.value.isInitialized
-                              ? Container(
-                            child: AspectRatio(
-                                aspectRatio: controller!.value.aspectRatio,
-                                child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(15),
-                                    child:  VideoPlayer(controller!))),
-                          )
-                              :   Container(),
+                    Expanded(
+                      child: RepaintBoundary(
+                        key: key,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Container(
+                              child: AspectRatio(
+                                  aspectRatio: controller!.value.aspectRatio,
+                                  child: VideoPlayer(controller!)),
+                            ),
 
 
-                          GestureDetector(
-                            onTap: ()async{
-                              //print('Video Duration: ${_controller!.value.duration.inSeconds}');
-                              print('Duration1: $_duration');
+                            GestureDetector(
+                              onTap: () async {
+                                //print('Video Duration: ${_controller!.value.duration.inSeconds}');
+                                print('Duration1: $_duration');
 
-                              setState(() {
-                                controller!.value.isPlaying
-                                    ? controller!.pause()
-                                    : controller!.play();
-                                print('data source : ${controller!.dataSource}');
-                              });
-                              //
-                              // //to do
-                              // setState(() {
-                              //   isplaying
-                              //       ? animationIconController1.reverse()
-                              //       : animationIconController1.forward();
-                              //   isplaying = !isplaying;
-                              // });
-                              if (controller!.value.isPlaying) {
-                                print('isPlaying: ${controller!.value.isPlaying}');
-                                audioCache!.play("Song1.mp3");
-
-                                // audioPlayer.play('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
-                                //  setState(() {
-                                //    issongplaying = true;
-                                //  });
-                              } else {
-                                print('isPlaying: ${controller!.value.isPlaying}');
-                                audioPlayer.pause();
-
+                                setState(() {
+                                  controller!.value.isPlaying
+                                      ? controller!.pause()
+                                      : controller!.play();
+                                  print('data source : ${controller!.dataSource}');
+                                });
+                                //
+                                // //to do
                                 // setState(() {
-                                //   issongplaying = false;
+                                //   isplaying
+                                //       ? animationIconController1.reverse()
+                                //       : animationIconController1.forward();
+                                //   isplaying = !isplaying;
                                 // });
-                              }
-                            },
-                            child: Icon(
-                              controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                              color: Colors.white,
-                            ),
-                          ),
+                                if (controller!.value.isPlaying) {
+                                  print('isPlaying: ${controller!.value.isPlaying}');
+                                  audioCache!.play("$selectedMusic");
+                                  //audioCache!.play("Song2.mp3");
+                                  // audioPlayer.play('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+                                  //  setState(() {
+                                  //    issongplaying = true;
+                                  //  });
+                                } else {
+                                  print('isPlaying: ${controller!.value.isPlaying}');
+                                  audioPlayer.pause();
 
-                          Positioned(
-                            bottom: 0,left: 0,right: 0,
-                            child: VideoProgressIndicator(
-                              controller!,
-                              allowScrubbing: true,
+                                  // setState(() {
+                                  //   issongplaying = false;
+                                  // });
+                                }
+                              },
+                              child: Icon(
+                                controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                                color: Colors.white,
+                              ),
                             ),
-                          )
-                        ],
+
+                            Positioned(
+                              bottom: 0,left: 0,right: 0,
+                              child: VideoProgressIndicator(
+                                controller!,
+                                allowScrubbing: true,
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
+                    SizedBox(height: 20,),
+
+                    Text("Music List", style: TextStyle(
+                        fontFamily: "",
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold)),
+                    SizedBox(height: 5,),
+                    ListView.builder(
+                        itemCount: musicList.length,
+                        shrinkWrap: true,
+                        //scrollDirection: Axis.vertical,
+                        itemBuilder: (context,index){
+                          return GestureDetector(
+                            onTap: (){
+                              selectedMusic = musicList[index].musicUrl;
+                              setState(() {
+                                selectedIndex = index;
+                              });
+                              print(selectedMusic);
+                              print(index);
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    child: Text(musicList[index].name,
+                                      style: TextStyle(color: selectedIndex == index  ? Colors.black87: Colors.grey.shade600),),
+                                  ),
+                                  Container(
+                                    child: selectedIndex == index ? Icon(Icons.pause) : Icon(Icons.play_arrow),
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        })
+
+
 
                   ],
                 ),
@@ -431,6 +434,21 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
                         fontWeight: FontWeight.bold),
                   ),
                 ),
+                //Container()
+                // GestureDetector(
+                //   onTap: (){
+                //     if(controller!.value.isPlaying){
+                //       if(mute){
+                //
+                //       } else{
+                //         controller!.setVolume(0);
+                //       }
+                //     }
+                //   },
+                //   child: Container(
+                //     child: Icon(Icons.volume_mute),
+                //   ),
+                // )
                 GestureDetector(
                   onTap: () async {
                     //Fluttertoast.showToast(msg: 'Please Wait...', toastLength: Toast.LENGTH_LONG, timeInSecForIosWeb: 1,);
@@ -439,7 +457,7 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
                     // });
                     //load_path_video();
                     _capturePng();
-                    //load_path_video();
+                    //loadPathVideo();
                     //_saveVideo();
                   },
                   child: Container(child: Icon(Icons.check_rounded)),
@@ -504,4 +522,11 @@ class BasicOverlayWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+class Music {
+  String musicUrl;
+  String name;
+
+  Music({required this.musicUrl, required this.name});
 }

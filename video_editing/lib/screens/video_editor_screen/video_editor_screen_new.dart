@@ -19,7 +19,7 @@ class VideoEditorScreenNew extends StatefulWidget {
   _VideoEditorScreenNewState createState() => _VideoEditorScreenNewState();
 }
 
-class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
+class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> with SingleTickerProviderStateMixin {
   final _exportingProgress = ValueNotifier<double>(0.0);
   final _isExporting = ValueNotifier<bool>(false);
   final double height = 60;
@@ -34,18 +34,14 @@ class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
 
   Duration _duration = new Duration();
   Duration _position = new Duration();
+  late TabController tabController;
 
   @override
   void initState() {
     _controller = VideoEditorController.file(widget.file,
         maxDuration: Duration(seconds: 30))
       ..initialize().then((_) => setState(() {}));
-    //_controller.video.setVolume(0);
-    // iconController = AnimationController(
-    //     vsync: this, duration: Duration(milliseconds: 1000));
-
-    //audioPlayer1.open(Audio('assets/Song1.mp3'),autoStart: false,showNotification: true);
-    //initPlayer();
+    tabController = TabController(vsync: this, length: 2);
     super.initState();
   }
 
@@ -54,7 +50,7 @@ class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
     _exportingProgress.dispose();
     _isExporting.dispose();
     _controller.dispose();
-
+    tabController.dispose();
     // iconController.dispose();
     // audioPlayer1.dispose();
     super.dispose();
@@ -155,12 +151,12 @@ class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
 
         if (cover != null) {
           _exportText = "Video Cover Downloaded! ${cover.path}";
-          showModalBottomSheet(
-            context: context,
-            backgroundColor: Colors.black54,
-            builder: (BuildContext context) =>
-                Image.memory(cover.readAsBytesSync(),fit: BoxFit.cover,),
-          );
+          // showModalBottomSheet(
+          //   context: context,
+          //   backgroundColor: Colors.black54,
+          //   builder: (BuildContext context) =>
+          //       Image.memory(cover.readAsBytesSync(),fit: BoxFit.cover,),
+          // );
           GallerySaver.saveImage(cover.path,
               albumName: "Video Maker");
         } else{
@@ -199,104 +195,73 @@ class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
                               length: 2,
                               child: Column(children: [
                                 Expanded(
-                                    child: TabBarView(
-                                      physics: NeverScrollableScrollPhysics(),
-                                      children: [
-                                        Stack(alignment: Alignment.center,
-                                            children: [
-                                              Stack(
-                                                alignment: Alignment.bottomRight,
-                                                children: [
-                                                  Container(
-                                                    //width: Get.width,
-                                                    //color: Colors.transparent,
-                                                    // decoration: BoxDecoration(
-                                                    //   color: Colors.yellow,
-                                                    // ),
-                                                    child: CropGridViewer(
-                                                      controller: _controller,
-                                                      showGrid: false,
-                                                      //horizontalMargin: 10,
-                                                    ),
-                                                  ),
+                                    child: Container(
+                                     //margin: EdgeInsets.only(left: 10, right: 10),
+                                      child: TabBarView(
+                                        controller: tabController,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        children: [
+                                          Stack(alignment: Alignment.center,
+                                              children: [
+                                                Stack(
+                                                  alignment: Alignment.bottomRight,
+                                                  children: [
+                                                    Container(
+                                                      //width: Get.width,
+                                                      //color: Colors.transparent,
+                                                      // decoration: BoxDecoration(
+                                                      //   color: Colors.transparent,
+                                                      // ),
+                                                      child: AspectRatio(
 
-                                                  Positioned(
-                                                      bottom: 5,
-                                                      child: file != null ? Image.file(file!,
-                                                        height: 50,
-                                                        width: MediaQuery.of(context).size.width,) : Container())
-                                                ],
-                                              ),
-
-                                              AnimatedBuilder(
-                                                animation: _controller.video,
-                                                builder: (_, __) => OpacityTransition(
-                                                  visible: !_controller.isPlaying,
-                                                  child: GestureDetector(
-                                                    //onTap: _controller.video.play,
-                                                    //onTap: ()=> _controller.video.play,
-                                                    onTap: () async {
-
-                                                      _controller.video.play();
-
-                                                      // setState(() {
-                                                      //   isplaying ? _animationIconController1!.reverse() : _animationIconController1!.forward();
-                                                      //   isplaying = !isplaying;
-                                                      //   print('isplaying : $isplaying');
-                                                      // });
-                                                      // if (issongplaying == false) {
-                                                      //   // audioCache!.play("Song1.mp3");
-                                                      //   audioPlayer.play('song1.mp3');
-                                                      //   setState(() {
-                                                      //     issongplaying = true;
-                                                      //     print('issongplaying1 : $issongplaying');
-                                                      //   });
-                                                      // } else {
-                                                      //   await Future.delayed(Duration(seconds: 1));
-                                                      //   await audioPlayer.pause();
-                                                      //   setState(() {
-                                                      //     issongplaying = false;
-                                                      //     print('issongplaying2 : $issongplaying');
-                                                      //   });
-                                                      // }
-
-                                                      /*setState(() {
-                                              isAnimated = !isAnimated;
-
-                                              if(isAnimated)
-                                              {
-                                                print('print: $isAnimated');
-                                                _controller.video.play();
-                                                iconController.forward();
-                                                audioPlayer1.play();
-                                              }else{
-                                                print('print1: $isAnimated');
-                                               // _controller.video.pause();
-                                                iconController.reverse();
-                                                audioPlayer1.pause();
-                                              }
-
-
-                                            });*/
-                                                    },
-                                                    child: Container(
-                                                      width: 40,
-                                                      height: 40,
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        shape: BoxShape.circle,
+                                                        aspectRatio: (Get.width*2)/(Get.height),
+                                                        child: CropGridViewer(
+                                                          controller: _controller,
+                                                          showGrid: false,
+                                                          //horizontalMargin: 10,
+                                                        ),
                                                       ),
-                                                      child: Icon(Icons.play_arrow,
-                                                          color: Colors.black),
+                                                    ),
+
+                                                    Positioned(
+                                                        bottom: 5,
+                                                        child: file != null ? Image.file(file!,
+                                                          height: 50,
+                                                          width: MediaQuery.of(context).size.width,) : Container())
+                                                  ],
+                                                ),
+
+                                                AnimatedBuilder(
+                                                  animation: _controller.video,
+                                                  builder: (_, __) => OpacityTransition(
+                                                    visible: !_controller.isPlaying,
+                                                    child: GestureDetector(
+                                                      //onTap: _controller.video.play,
+                                                      //onTap: ()=> _controller.video.play,
+                                                      onTap: () async {
+
+                                                        _controller.video.play();
+
+                                                      },
+                                                      child: Container(
+                                                        width: 40,
+                                                        height: 40,
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          shape: BoxShape.circle,
+                                                        ),
+                                                        child: Icon(Icons.play_arrow,
+                                                            color: Colors.black),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                            ]
-                                        ),
-                                        //Container()
-                                        CoverViewer(controller: _controller)
-                                      ],
+                                              ]
+                                          ),
+                                          //Container()
+                                          CoverViewer(controller: _controller)
+                                        ],
+                                      ),
                                     )),
                                 SizedBox(height: 10,),
                                 Container(
@@ -311,7 +276,7 @@ class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
                                         // labelPadding:
                                         // EdgeInsets.only(top: 10.0, bottom: 5, left: 10, right: 10),
                                         unselectedLabelColor: Colors.black38,
-                                        //controller: _tabController,
+                                        controller:  tabController,
                                         labelStyle: TextStyle(fontSize: 17, color: Colors.grey),
                                         tabs: [
                                           Container(
@@ -370,6 +335,7 @@ class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
                                       ),
                                       Expanded(
                                         child: TabBarView(
+                                          controller: tabController,
                                           children: [
                                             Container(
                                                 child: Column(
@@ -397,19 +363,22 @@ class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
                         visible: export,
                         child:  ValueListenableBuilder(
                             valueListenable: _exportingProgress,
-                            builder: (_, double value, __) =>
-                                Container(
-                                  height: 55,
-                                  width: Get.width/2,
-                                  color: Colors.black,
-                                  child: Center(
-                                    child: Text(
+                            builder: (_, double value, __) {
+                              print('vslue: $value');
+                              return Container(
+                                height: 55,
+                                width: Get.width/2,
+                                color: Colors.black,
+                                child: Center(
+                                  child: Text(
                                       "Downloading video ${(value * 100).ceil()}%",
                                       style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)
 
-                                    ),
                                   ),
                                 ),
+                              );
+                            }
+
                           ),
                       ),
                     ),
@@ -455,15 +424,23 @@ class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
                 child: Icon(Icons.crop, color: Colors.black),
               ),
             ),
+
+            // Expanded(
+            //   child: GestureDetector(
+            //     onTap: _exportCover,
+            //     child: Icon(Icons.save_alt, color: Colors.black),
+            //   ),
+            // )
             Expanded(
               child: GestureDetector(
-                onTap: _exportCover,
-                child: Icon(Icons.save_alt, color: Colors.black),
-              ),
-            ),
-            Expanded(
-              child: GestureDetector(
-                onTap: _exportVideo,
+                onTap: (){
+                  //_exportVideo
+                  if(tabController.index == 0){
+                    _exportVideo();
+                  }else{
+                    _exportCover();
+                  }
+                },
                 child: Icon(Icons.save, color: Colors.black),
               ),
             ),
@@ -530,7 +507,8 @@ class _VideoEditorScreenNewState extends State<VideoEditorScreenNew> {
                 controller: _controller, margin: EdgeInsets.only(top: 10)),
             controller: _controller,
             height: height,
-            horizontalMargin: height / 4),
+            horizontalMargin: height / 4
+        ),
       ),
       // Slider(
       //   activeColor: Colors.blue,

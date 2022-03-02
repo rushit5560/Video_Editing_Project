@@ -97,17 +97,52 @@ class ProfileScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           profileScreenController.uPhotoUrl!.isNotEmpty?
-          ClipOval(
-            child: Image.network(
-              profileScreenController.uPhotoUrl!
-            ),
-          ) :
-            ClipOval(),
+              Container(
+                //height: 100, width: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.grey.shade200
+                ),
+                child: Image.network(
+                    profileScreenController.uPhotoUrl!
+                ),
+              ) :
+            Container(),
+          SizedBox(height: 20,),
+           Container(
+             height: 40, width: Get.width/1.3,
+             padding: EdgeInsets.only(left: 15),
+             decoration: BoxDecoration(
+                 borderRadius: BorderRadius.circular(10),
+                 color: Colors.grey.shade400
+             ),
+             child: Column(
+               crossAxisAlignment: CrossAxisAlignment.start,
+               mainAxisAlignment: MainAxisAlignment.center,
+               children: [
+                 Text(profileScreenController.uName!.isNotEmpty ? '${profileScreenController.uName}' : '',
+                   style: TextStyle(fontSize: 17),),
+               ],
+             ),
+           ),
+
           SizedBox(height: 10,),
-           Text(profileScreenController.uName!.isNotEmpty ? 'Name: ${profileScreenController.uName}' : '', style: TextStyle(fontSize: 17),),
-          SizedBox(height: 10,),
-           Text(profileScreenController.uEmail!.isNotEmpty ?'Email: ${profileScreenController.uEmail}' : '', style: TextStyle(fontSize: 17),),
-          SizedBox(height: 10,),
+           Container(
+               height: 40, width: Get.width/1.3,
+               padding: EdgeInsets.only(left: 15),
+               decoration: BoxDecoration(
+                   borderRadius: BorderRadius.circular(10),
+                   color: Colors.grey.shade400
+               ),
+               child: Column(
+                 crossAxisAlignment: CrossAxisAlignment.start,
+                 mainAxisAlignment: MainAxisAlignment.center,
+                 children: [
+                   Text(profileScreenController.uEmail!.isNotEmpty ?'${profileScreenController.uEmail}' : '',
+                     style: TextStyle(fontSize: 17),),
+                 ],
+               )),
+          SizedBox(height: 20,),
 
           GestureDetector(
             onTap: () async {
